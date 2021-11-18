@@ -215,7 +215,15 @@ namespace PYTHIA6
 
 namespace PYTHIA8
 {
-  string config_file;// = "/sphenix/user/cdean/public/forZhaozhong/phpythia8.cfg";
+  string config_file = (Enable::signal==true)? "/sphenix/user/cdean/public/forZhaozhong/phpythia8_D02Kpi.cfg":"/sphenix/user/cdean/public/forZhaozhong/phpythia8.cfg";
+  // = "/sphenix/user/cdean/public/forZhaozhong/phpythia8.cfg";
+
+
+	
+ // std::cout << "config_file is " << config_file << std::endl;
+
+  //string config_file = "/sphenix/user/cdean/public/forZhaozhong/phpythia8.cfg";
+	
 /*
   if (Enable::signal == 1){
  config_file = "/sphenix/user/cdean/public/forZhaozhong/phpythia8_D02Kpi.cfg";
@@ -303,12 +311,6 @@ void InputInit()
     INPUTGENERATOR::Pythia8->set_config_file(PYTHIA8::config_file);
 
 
-	if (Enable::signal == 1){
-		PYTHIA8::config_file = "/sphenix/user/zshi/FastMLWork7/JobSubFinal/macros/detectors/sPHENIX/phpythia8_D02Kpi.cfg";
-	}
-	else{
-		PYTHIA8::config_file = "/sphenix/user/zshi/FastMLWork7/JobSubFinal/macros/detectors/sPHENIX/phpythia8.cfg";
-	}
 
     if (Enable::signal)
     {

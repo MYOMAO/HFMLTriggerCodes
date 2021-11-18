@@ -164,15 +164,13 @@ int HFMLTriggerHepMCTrigger::process_event(PHCompositeNode* topNode)
     theEvent->print();
   }
 
-	//TDatabasePDG* pdg = TDatabasePDG::Instance();
+  TDatabasePDG* pdg = TDatabasePDG::Instance();
 
-//  int targetPID = std::abs(pdg->GetParticle("D0")->PdgCode());
- // int daughter1PID = std::abs(pdg->GetParticle("pi+")->PdgCode());
- // int daughter2PID = std::abs(pdg->GetParticle("K+")->PdgCode());
+  int targetPID = std::abs(pdg->GetParticle("D0")->PdgCode());
+  int daughter1PID = std::abs(pdg->GetParticle("pi+")->PdgCode());
+  int daughter2PID = std::abs(pdg->GetParticle("K+")->PdgCode());
 
- // bool acceptEvent = false;
-   bool acceptEvent = true;  //Always accepted
-
+  bool acceptEvent = false;
 
   assert(m_hNorm);
   m_hNorm->Fill("Event", 1);
@@ -180,26 +178,16 @@ int HFMLTriggerHepMCTrigger::process_event(PHCompositeNode* topNode)
   unsigned int nD0(0);
   unsigned int nD0PiK(0);
 
- /*
- 
   auto range = theEvent->particle_range();
   for (HepMC::GenEvent::particle_const_iterator piter = range.begin(); piter != range.end(); ++piter)
   {
     const HepMC::GenParticle* p = *piter;
     assert(p);
 
-//	float particlepx = p->momentum().x();
-//	float particlepy = p->momentum().y();
+	float particlepx = p->momentum().x();
+	float particlepy = p->momentum().y();
 
-//	float ParPt = sqrt(particlepx * particlepx + particlepy * particlepy);
-
-   // double eta = p->momentum().eta();
-
-	//cout << "eta = " << eta << endl;
-
- //   if (eta > _eta_min && eta < _eta_max) acceptEvent = true;
-//    if (eta > _eta_min && eta < _eta_max) acceptEvent = true;
-
+	float ParPt = sqrt(particlepx * particlepx + particlepy * particlepy);
 
     if (std::abs(p->pdg_id()) == targetPID && ParPt > -1)
     {
@@ -279,11 +267,7 @@ int HFMLTriggerHepMCTrigger::process_event(PHCompositeNode* topNode)
       }
 
     }  //    if (std::abs(p-> pdg_id()) == targetPID)
-
   }    //  for (HepMC::GenEvent::particle_const_iterator piter = range.begin(); piter != range.end(); ++piter)
-*/
-
-
 
   if (nD0 >= 2)
   {
@@ -318,7 +302,7 @@ int HFMLTriggerHepMCTrigger::process_event(PHCompositeNode* topNode)
 
   assert(m_Flags);
   m_Flags->set_int_param(Name(), acceptEvent);
-
+/*
   if (acceptEvent)
   {
     m_hNorm->Fill("Accepted", 1);
@@ -326,6 +310,11 @@ int HFMLTriggerHepMCTrigger::process_event(PHCompositeNode* topNode)
   }
   else
     return m_RejectReturnCode;
+*/
+
+  return Fun4AllReturnCodes::EVENT_OK;
+  
+
 }
 
 int HFMLTriggerHepMCTrigger::End(PHCompositeNode* topNode)

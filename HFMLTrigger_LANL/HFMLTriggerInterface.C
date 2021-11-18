@@ -391,8 +391,8 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 
 			const string& name = flagIter->first;
 			rapidjson::Value keyName(name.c_str(), alloc);
-			//const bool flag = flagIter->second > 0 ? true : false;
-			const bool flag = false;
+			const bool flag = flagIter->second > 0 ? true : false;
+			//const bool flag = false;
 
 			flagsTree.AddMember(keyName, flag, alloc);
 			//      flagsTree.PushBack(aFlag, alloc);

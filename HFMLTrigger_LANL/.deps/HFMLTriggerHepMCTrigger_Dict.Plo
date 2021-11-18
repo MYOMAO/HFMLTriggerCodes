@@ -245,8 +245,8 @@ HFMLTriggerHepMCTrigger_Dict.lo: HFMLTriggerHepMCTrigger_Dict.C \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-8.3/opt/sphenix/core/gcc/8.3.0.1-0a5ad/x86_64-centos7/include/c++/8.3.0/bits/forward_list.tcc \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-8.3/opt/sphenix/core/root-6.22.02/include/TDataMember.h \
  HFMLTriggerHepMCTrigger.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-8.3/release/release_new/new.2/include/fun4all/SubsysReco.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-8.3/release/release_new/new.2/include/fun4all/Fun4AllBase.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-8.3/release/release_ana/ana.273/include/fun4all/SubsysReco.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-8.3/release/release_ana/ana.273/include/fun4all/Fun4AllBase.h \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-8.3/opt/sphenix/core/gcc/8.3.0.1-0a5ad/x86_64-centos7/include/c++/8.3.0/climits \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-8.3/opt/sphenix/core/gcc/8.3.0.1-0a5ad/x86_64-centos7/lib/gcc/x86_64-pc-linux-gnu/8.3.0/include-fixed/limits.h \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-8.3/opt/sphenix/core/gcc/8.3.0.1-0a5ad/x86_64-centos7/lib/gcc/x86_64-pc-linux-gnu/8.3.0/include-fixed/syslimits.h \
@@ -813,9 +813,9 @@ HFMLTriggerHepMCTrigger_Dict.lo: HFMLTriggerHepMCTrigger_Dict.C \
 
 HFMLTriggerHepMCTrigger.h:
 
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-8.3/release/release_new/new.2/include/fun4all/SubsysReco.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-8.3/release/release_ana/ana.273/include/fun4all/SubsysReco.h:
 
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-8.3/release/release_new/new.2/include/fun4all/Fun4AllBase.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-8.3/release/release_ana/ana.273/include/fun4all/Fun4AllBase.h:
 
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-8.3/opt/sphenix/core/gcc/8.3.0.1-0a5ad/x86_64-centos7/include/c++/8.3.0/climits:
 

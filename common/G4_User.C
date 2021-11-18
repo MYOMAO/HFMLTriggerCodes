@@ -3,7 +3,7 @@
 
 #include <fun4all/Fun4AllServer.h>
 #include "../AntiTrigger/AntiTrigger.h"
-
+#include "G4_Input.C"
 
 	R__LOAD_LIBRARY(libfun4all.so)
 	R__LOAD_LIBRARY(libhfmltrigger.so)
@@ -62,12 +62,14 @@ void UserAnalysisInit()
 
 	//Anti-Trigger//
 
+	if(Enable::signal == false){
 
-	AntiTrigger* myFinder = new AntiTrigger("myTestAntiTrigger");
-	myFinder->Verbosity(1);
-	std::vector<std::string> particleList = {"D0", "D+", "Ds+", "Lambdac+", "B+", "B0", "Bs0", "Lambdab0"};
-	myFinder->setParticleList(particleList);
-	se->registerSubsystem(myFinder);
+		AntiTrigger* myFinder = new AntiTrigger("myTestAntiTrigger");
+		myFinder->Verbosity(1);
+		std::vector<std::string> particleList = {"D0", "D+", "Ds+", "Lambdac+", "B+", "B0", "Bs0", "Lambdab0"};
+		myFinder->setParticleList(particleList);
+		se->registerSubsystem(myFinder);
+	}
 
 	HFMLTriggerHepMCTrigger * Test = new HFMLTriggerHepMCTrigger("D0toPiKInAcceptance","Test");
 	Test->Verbosity(0);

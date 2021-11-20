@@ -47,7 +47,7 @@ R__LOAD_LIBRARY(libFermimotionAfterburner.so)
 
 namespace Enable
 {
-  bool signal = false;
+  bool signal = true;
 }
 
 

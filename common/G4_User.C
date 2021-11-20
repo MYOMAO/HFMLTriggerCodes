@@ -71,7 +71,7 @@ void UserAnalysisInit()
 		se->registerSubsystem(myFinder);
 	}
 
-	HFMLTriggerHepMCTrigger * Test = new HFMLTriggerHepMCTrigger("D0toPiKInAcceptance","Test");
+	HFMLTriggerHepMCTrigger * Test = new HFMLTriggerHepMCTrigger("D0toPiKInAcceptance","Test",Enable::signal);
 	Test->Verbosity(0);
 	se->registerSubsystem(Test);
 

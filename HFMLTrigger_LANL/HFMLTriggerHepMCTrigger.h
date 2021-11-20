@@ -27,7 +27,7 @@ class GenEvent;
 class HFMLTriggerHepMCTrigger : public SubsysReco
 {
  public:
-  HFMLTriggerHepMCTrigger(const std::string &moduleName, const std::string &filename);
+  HFMLTriggerHepMCTrigger(const std::string &moduleName, const std::string &filename, bool IsSignal);
 
   int Init(PHCompositeNode *);
   int InitRun(PHCompositeNode *);
@@ -77,6 +77,8 @@ class HFMLTriggerHepMCTrigger : public SubsysReco
  private:
   int _ievent;
 
+
+
   int m_RejectReturnCode;
 
   TFile *_f;
@@ -85,6 +87,8 @@ class HFMLTriggerHepMCTrigger : public SubsysReco
 
   double _eta_min;
   double _eta_max;
+
+  bool SignalSim;
 
   //! The embedding ID for the HepMC subevent to be analyzed.
   //! positive ID is the embedded event of interest, e.g. jetty event from pythia

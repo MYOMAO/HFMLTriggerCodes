@@ -135,7 +135,7 @@ int HFMLTriggerInterface::Init(PHCompositeNode* topNode)
 {
 
 	_ievent = 0;
-	
+
 	DebugFile = new TFile("DebugFile.root","RECREATE");
 
 	DebugFile->cd();
@@ -155,7 +155,7 @@ int HFMLTriggerInterface::Init(PHCompositeNode* topNode)
 	HitTreeZZ->Branch("INTTHitY",INTTHitY,"INTTHitY[INTTHitSize]/F");
 	HitTreeZZ->Branch("INTTHitZ",INTTHitZ,"INTTHitZ[INTTHitSize]/F");
 	HitTreeZZ->Branch("INTTTrkID",INTTTrkID,"INTTTrkID[MVTXHitSize]/I");
-	
+
 
 
 	HitTreeZZ->Branch("LadderZIdSave",LadderZIdSave,"LadderZIdSave[INTTHitSize]/I");
@@ -168,7 +168,7 @@ int HFMLTriggerInterface::Init(PHCompositeNode* topNode)
 
 	HitTreeZZ->Branch("NTruthTrks",&NTruthTrks,"NTruthTrks/I");
 	HitTreeZZ->Branch("TruthTrkID",TruthTrkID,"TruthTrkID[NTruthTrks]/I");
-	
+
 	HitTreeZZ->Branch("OriginX",OriginX,"OriginX[NTruthTrks]/F");
 	HitTreeZZ->Branch("OriginY",OriginY,"OriginY[NTruthTrks]/F");
 	HitTreeZZ->Branch("OriginZ",OriginZ,"OriginZ[NTruthTrks]/F");
@@ -278,7 +278,7 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 		m_GenEventMap->identify();
 		return Fun4AllReturnCodes::ABORTEVENT;
 	}
-		
+
 
 
 	HepMC::GenEvent* theEvent = genevt->getEvent();
@@ -429,6 +429,9 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 
 	NEGED = 0;
 
+
+
+
 	auto hitset_range = m_hitsets->getHitSets(TrkrDefs::TrkrId::mvtxId);
 	for (auto hitset_iter =  hitset_range.first; hitset_iter != hitset_range.second; ++hitset_iter)
 	{
@@ -445,11 +448,11 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 			int trkid;
 			TrkrHitTruthAssoc::MMap g4hit_map;
 			m_hit_truth_map->getG4Hits(hitsetkey, hitkey, g4hit_map);
-		//	int SUCK = 0;
+			//	int SUCK = 0;
 			if (g4hit_map.size() != 1)
 			{
 				std::cout << "More than one (" << g4hit_map.size() <<") g4Hit associated to " << hitkey << std::endl;
-	//			SUCK = 1;
+				//			SUCK = 1;
 			}
 			rapidjson::Value truthHitTree(rapidjson::kArrayType);
 			for (auto truth_iter = g4hit_map.begin(); truth_iter != g4hit_map.end(); ++truth_iter)
@@ -457,17 +460,17 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 				// g4hit key
 				const auto g4hit_key = truth_iter->second.second;
 				truthHitTree.PushBack(static_cast<uint64_t>(g4hit_key), alloc);
-			
+
 
 				//cout << "static_cast<uint64_t>(g4hit_key) = " << static_cast<uint32_t>(g4hit_key) << "    static_cast<uint64_t>(g4hit_key) = " << static_cast<uint64_t>(g4hit_key) << endl;
-				
+
 
 				PHG4Hit *g4hit = m_g4hits_mvtx->findHit( static_cast<uint64_t>(g4hit_key) );
 
 				trkid =  g4hit->get_trkid();
 
-			//	if(trkid < 0) cout << "trkid = " << trkid << "   static_cast<uint64_t>(g4hit_key) =  " <<  static_cast<uint64_t>(g4hit_key) << endl;
-			//	if(SUCK == 1) cout << "trkid = " << trkid << "   static_cast<uint64_t>(g4hit_key) =  " <<  static_cast<uint64_t>(g4hit_key) << endl;
+				//	if(trkid < 0) cout << "trkid = " << trkid << "   static_cast<uint64_t>(g4hit_key) =  " <<  static_cast<uint64_t>(g4hit_key) << endl;
+				//	if(SUCK == 1) cout << "trkid = " << trkid << "   static_cast<uint64_t>(g4hit_key) =  " <<  static_cast<uint64_t>(g4hit_key) << endl;
 				if(trkid < 0 ) NEGED = static_cast<uint64_t>(g4hit_key);
 
 				//	auto hitid =  g4hit->get_hit_id();
@@ -566,6 +569,148 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 			}  //    if (layer < _nlayers_maps)
 		}  //   for (TrkrHitSetContainer::ConstIterator hitset_iter = hitset_range.first;
 	}  //   for (TrkrHitSet::ConstIterator hit_iter = hit_range.first;
+
+
+	const int NLayerTotalMVTX = 3;
+	int NStaveLater[NLayerTotalMVTX] = {12, 16, 20};
+	int NChipMVTX = 9;
+	int Fire = 0;
+	int NCol = 1024;
+	int NRow = 512;
+	int DoNoisy = 1;
+	
+
+	float NoiseLevel = 0.000001;
+	
+	double Random; 
+
+
+
+	if(DoNoisy == 1){
+		rapidjson::Value truthHitTree(rapidjson::kArrayType);
+
+		for(int i = 0; i < NLayerTotalMVTX; i++){
+
+
+			for(int j = 0; j < NStaveLater[i];j ++){
+
+
+				for(int k = 0; k < NChipMVTX; k++){
+
+
+					for(int p = 0; p < NCol; p++){
+
+						for(int q = 0;	q < NRow; q++){
+						
+							Fire = 0;
+
+							Random = rand() / double(RAND_MAX);
+
+							if(Random < NoiseLevel)  Fire = 1;
+
+							if(Fire == 1){
+
+								unsigned int chip = k;
+								unsigned int stave = j;
+								unsigned int layer = i;
+							
+								unsigned int pixel_z = p;
+								unsigned int pixel_x = q;
+
+
+								CylinderGeom_Mvtx* geom = dynamic_cast<CylinderGeom_Mvtx*>(m_Geoms->GetLayerGeom(layer));
+								assert(geom);
+
+								TVector3 local_coords = geom->get_local_coords_from_pixel(p, q);
+								TVector3 world_coords = geom->get_world_from_local_coords(stave,
+										0,
+										0,
+										chip,
+										local_coords);
+
+
+
+								//      ptree hitTree;
+								rapidjson::Value hitTree(rapidjson::kObjectType);
+					//			truthHitTree.PushBack(-9999,alloc);
+								int trkid = -9999;
+								//      ptree hitIDTree;
+								rapidjson::Value hitIDTree(rapidjson::kObjectType);
+								hitIDTree.AddMember("HitSequenceInEvent", hitID, alloc);
+					//			hitIDTree.AddMember("G4HitAssoc", truthHitTree, alloc);
+								hitIDTree.AddMember("MVTXTrkID", trkid, alloc);
+
+								//hitIDTree.AddMember("PixelHalfLayerIndex", halfLayerIndex, alloc);
+								//hitIDTree.AddMember("PixelPhiIndexInLayer", pixelPhiIndex, alloc);
+								//hitIDTree.AddMember("PixelPhiIndexInHalfLayer", pixelPhiIndexHL, alloc);
+								//hitIDTree.AddMember("PixelZIndex", pixelZIndex, alloc);
+
+								hitIDTree.AddMember("Layer", layer, alloc);
+								//hitIDTree.AddMember("HalfLayer", halflayer, alloc);
+								hitIDTree.AddMember("Stave", stave, alloc);
+								//      hitIDTree.put("HalfStave", cell->get_half_stave_index());
+								//      hitIDTree.put("Module", cell->get_module_index());
+								hitIDTree.AddMember("Chip", chip, alloc);
+								hitIDTree.AddMember("Pixel_x", pixel_x, alloc);
+								hitIDTree.AddMember("Pixel_z", pixel_z, alloc);
+								hitTree.AddMember("ID", hitIDTree, alloc);
+
+								hitTree.AddMember("Coordinate",
+										loadCoordinate(world_coords.x(),
+											world_coords.y(),
+											world_coords.z()),
+										alloc);
+
+								//      rawHitsTree.add_child("MVTXHit", hitTree);
+								rawHitsTree.PushBack(hitTree, alloc);
+
+								m_hitStaveLayer->Fill(stave, layer);
+								m_hitModuleHalfStave->Fill(stave, layer);
+								m_hitChipModule->Fill(chip, stave);
+
+								m_hitLayerMap->Fill(world_coords.x(), world_coords.y(), layer);
+								//m_hitPixelPhiMap->Fill(pixelPhiIndex, atan2(world_coords.y(), world_coords.x()), layer);
+								//m_hitPixelPhiMapHL->Fill(pixelPhiIndexHL, atan2(world_coords.y(), world_coords.x()), layer);
+								//m_hitPixelZMap->Fill(pixelZIndex, world_coords.z(), halfLayerIndex);
+
+								MVTXHitX[MVTXHitSize] = world_coords.x();
+								MVTXHitY[MVTXHitSize] = world_coords.y();
+								MVTXHitZ[MVTXHitSize] = world_coords.z();
+								MVTXTrkID[MVTXHitSize] = trkid;
+								LayerID[HitSize] = layer;
+								++hitID;
+								MVTXHitSize = MVTXHitSize + 1;
+								HitSize = HitSize + 1;
+
+
+
+
+
+
+							}
+
+
+
+						}
+
+
+
+					}
+
+
+				}
+
+			}
+
+
+		}
+
+
+
+	}
+
+
+
 	rawHitTree.AddMember("MVTXHits", rawHitsTree, alloc);
 	rapidjson::Value rawHitsTree2(rapidjson::kArrayType);
 
@@ -710,7 +855,7 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 				hitIDINTT++;
 				INTTHitSize = INTTHitSize + 1;
 				HitSize = HitSize + 1;
-				
+
 			}
 
 			//	cout << "Pass 5" << endl;
@@ -750,14 +895,14 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 	{
 		PHG4Hit *g4hit = g4hit_iter->second;
 
-	//	if(g4hit->get_hit_id() == NEGED) cout << "g4hit->get_hitid() = " << g4hit->get_hit_id() << "      g4hit->get_trkid()  = " << g4hit->get_trkid() << endl;
+		//	if(g4hit->get_hit_id() == NEGED) cout << "g4hit->get_hitid() = " << g4hit->get_hit_id() << "      g4hit->get_trkid()  = " << g4hit->get_trkid() << endl;
 
 		//int trkidCheck  = g4hit->get_trkid();
-		
+
 		//PHG4Particle * ParticleDebug =  m_truthInfo->GetParticle(trkidCheck);
-		
-//		cout << "g4hit->get_hitid() = " << g4hit->get_hit_id() << "      g4hit->get_trkid()  = " << g4hit->get_trkid() << "   ParticleDebug->get_pid() =  " << ParticleDebug->get_pid() << endl;
-		
+
+		//		cout << "g4hit->get_hitid() = " << g4hit->get_hit_id() << "      g4hit->get_trkid()  = " << g4hit->get_trkid() << "   ParticleDebug->get_pid() =  " << ParticleDebug->get_pid() << endl;
+
 		m_track_g4hits_map.insert(make_pair(g4hit->get_trkid(), g4hit_iter->first));
 	}
 
@@ -780,7 +925,7 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 	rapidjson::Value truthTracksTree(rapidjson::kArrayType);
 	// get set of primary particle
 	assert(m_truthInfo);
-//	auto pp_range = m_truthInfo->GetPrimaryParticleRange();
+	//	auto pp_range = m_truthInfo->GetPrimaryParticleRange();
 	auto pp_range = m_truthInfo->GetParticleRange();
 
 	NTruthTrks = 0;
@@ -849,9 +994,9 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 		//MVTX
 		int LayerHere = 0;
 		auto g4hits_iter = m_track_g4hits_map.equal_range(g4particle->get_track_id());
-		 
+
 		//if(g4particle->get_track_id() < 0)	cout << "g4particle->get_track_id() = " << g4particle->get_track_id() << endl;
-	//	cout << "g4particle->get_track_id() = " << g4particle->get_track_id() << endl;
+		//	cout << "g4particle->get_track_id() = " << g4particle->get_track_id() << endl;
 
 		for (auto& g4hit_iter = g4hits_iter.first;
 				g4hit_iter != g4hits_iter.second; ++g4hit_iter)
@@ -862,7 +1007,7 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 			//	HitInFoVec.first = LayerHere;
 			//	HitInFoVec.second =  static_cast<uint64_t>(g4hit_iter->second);
 
-			
+
 
 
 			//	cout << "HitInfo[trkid].size() = " << HitInfo[trkid].size() << endl;
@@ -871,15 +1016,15 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 
 			trackHitTree2.PushBack(LayerHere, alloc);
 			trackHitTree2.PushBack(static_cast<uint64_t>(g4hit_iter->second), alloc);
-			
-/*
-			PHG4Hit *g4hit = m_g4hits_mvtx->findHit( static_cast<uint64_t>(g4hit_iter->second) );
-			if(g4hit->get_trkid() < 0){
-				cout << "g4hit->get_hitid() = " << g4hit->get_hit_id() << "      g4hit->get_trkid()  = " << g4hit->get_trkid() << "  g4particle->get_track_id() = " << g4particle->get_track_id() << "   g4particle->get_pid() = " <<  g4particle->get_pid() << endl;
+
+			/*
+			   PHG4Hit *g4hit = m_g4hits_mvtx->findHit( static_cast<uint64_t>(g4hit_iter->second) );
+			   if(g4hit->get_trkid() < 0){
+			   cout << "g4hit->get_hitid() = " << g4hit->get_hit_id() << "      g4hit->get_trkid()  = " << g4hit->get_trkid() << "  g4particle->get_track_id() = " << g4particle->get_track_id() << "   g4particle->get_pid() = " <<  g4particle->get_pid() << endl;
 
 
-			}
-*/
+			   }
+			   */
 			trackHitTree.PushBack(trackHitTree2, alloc);
 
 			//    rapidjson::Value LayerID(LayerHere, alloc);
@@ -946,7 +1091,7 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 
 		auto g4hits_iter_intt = m_track_g4hits_map_intt.equal_range(g4particle->get_track_id());
 
-		
+
 
 
 
@@ -996,7 +1141,7 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 
 
 
- 			
+
 
 			//	cout << "Pass 6.11" << endl;
 
@@ -1100,12 +1245,12 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 
 	d.Accept(writer);
 
-	
+
 	EvtID = _ievent;
 	HitTreeZZ->Fill();
 
 	++_ievent;
-	
+
 	return Fun4AllReturnCodes::EVENT_OK;
 }
 

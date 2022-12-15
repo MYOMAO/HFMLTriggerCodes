@@ -6,10 +6,10 @@ echo "-------------- CHANGING SOFTWARE NOW BRO --------------------"
 
 #source /opt/sphenix/core/bin/sphenix_setup.csh -n 
 
-#source /cvmfs/sphenix.sdcc.bnl.gov/gcc-8.3/opt/sphenix/core/bin/sphenix_setup.csh -n ana.269
+source /cvmfs/sphenix.sdcc.bnl.gov/gcc-8.3/opt/sphenix/core/bin/sphenix_setup.csh -n ana.273
 
 
-source /opt/sphenix/core/bin/sphenix_setup.csh -n ana.273
+#source /opt/sphenix/core/bin/sphenix_setup.csh -n ana.273
 
 rm -r install
 

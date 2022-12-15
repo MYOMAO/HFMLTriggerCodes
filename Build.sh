@@ -53,6 +53,6 @@ make install
 cd ../
 
 
-setenv ROOT_INCLUDE_PATH /sphenix/user/zshi/FastMLWork7/JobSubFinal/macros/common:$ROOT_INCLUDE_PATH
+setenv ROOT_INCLUDE_PATH ${PWD}/common:$ROOT_INCLUDE_PATH
 
 #echo "-------------- DONE CHANGING SOFTWARE NOW BRO --------------------"

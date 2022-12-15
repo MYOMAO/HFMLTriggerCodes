@@ -577,7 +577,7 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 	int Fire = 0;
 	int NCol = 1024;
 	int NRow = 512;
-	int DoNoisy = 1;
+	int DoNoisy = 0;
 	
 
 	float NoiseLevel = 0.000001;

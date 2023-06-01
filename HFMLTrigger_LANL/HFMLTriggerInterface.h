@@ -10,6 +10,8 @@
 #include <vector>
 #include <map>
 #include <g4main/PHG4VtxPoint.h>
+#include <trackbase/ActsGeometry.h>
+
 
 class TTree;
 class TFile;
@@ -118,6 +120,7 @@ class HFMLTriggerInterface : public SubsysReco
   //TrkrClusterHitAssoc *m_cluster_hit_map;
 
   PdbParameterMap *m_Flags;
+  ActsGeometry * m_tGeometry;
 
   PHG4CylinderGeomContainer *m_Geoms;
   PHG4CylinderGeomContainer *m_Geoms2;
@@ -130,7 +133,7 @@ class HFMLTriggerInterface : public SubsysReco
   TH3F *m_hitPixelPhiMap;
   TH3F *m_hitPixelPhiMapHL;
   TH3F *m_hitPixelZMap;
-
+  
 };
 
 #endif  // __HFMLTriggerInterface_H__

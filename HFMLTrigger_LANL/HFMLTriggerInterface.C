@@ -21,10 +21,10 @@
 #include <trackbase/TrkrHit.h>
 //#include <trackbase/TrkrCluster.h>
 
-#include <mvtx/MvtxDefs.h>
+#include <trackbase/MvtxDefs.h>
 #include <mvtx/CylinderGeom_Mvtx.h>
 
-#include <intt/InttDefs.h>
+#include <trackbase/InttDefs.h>
 #include <intt/CylinderGeomIntt.h>
 
 #include <g4detectors/PHG4Cell.h>
@@ -36,8 +36,11 @@
 
 //#include <g4eval/SvtxEvalStack.h>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #include <HepMC/GenEvent.h>
 #include <HepMC/GenVertex.h>
+#pragma GCC diagnostic pop
 #include <phhepmc/PHHepMCGenEvent.h>
 #include <phhepmc/PHHepMCGenEventMap.h>
 
@@ -63,6 +66,7 @@
 #include <cmath>
 #include <cstddef>
 #include <iostream>
+#include <trackbase/ActsSurfaceMaps.h>
 
 using namespace std;
 
@@ -99,35 +103,34 @@ TTree * HitTreeZZ;
 int HitSize;
 int MVTXHitSize;
 int EvtID;
-float MVTXHitX[1000];
-float MVTXHitY[1000];
-float MVTXHitZ[1000];
-int MVTXTrkID[1000];
-
+float MVTXHitX[10000];
+float MVTXHitY[10000];
+float MVTXHitZ[10000];
+int MVTXTrkID[10000];
 
 
 int INTTHitSize;
-float INTTHitX[1000];
-float INTTHitY[1000];
-float INTTHitZ[1000];
-int INTTTrkID[1000];
-int LayerID[1000];
+float INTTHitX[10000];
+float INTTHitY[10000];
+float INTTHitZ[10000];
+int INTTTrkID[10000];
+int LayerID[10000];
 
-int LadderZIdSave[1000];
-int LadderPhiIdSave[1000];
-int RowSave[1000];
-int ColSave[1000];
+int LadderZIdSave[10000];
+int LadderPhiIdSave[10000];
+int RowSave[10000];
+int ColSave[10000];
 
 
 int NTruthTrks;
-int TruthTrkID[1000];
+int TruthTrkID[10000];
 
-float OriginX[1000];
-float OriginY[1000];
-float OriginZ[1000];
+float OriginX[10000];
+float OriginY[10000];
+float OriginZ[10000];
 
-float OriginR[1000];
-float OriginRho[1000];
+float OriginR[10000];
+float OriginRho[10000];
 
 unsigned int long long NEGED;
 
@@ -213,7 +216,7 @@ int HFMLTriggerInterface::InitRun(PHCompositeNode* topNode)
 		findNode::getClass<PHG4CylinderGeomContainer>(topNode, "CYLINDERGEOM_MVTX");
 	if (!m_Geoms)
 	{
-		std::cout << PHWHERE << "ERROR: Can't find node CYLINDERCELLGEOM_MVTX" << std::endl;
+		//std::cout << PHWHERE << "ERROR: Can't find node CYLINDERCELLGEOM_MVTX" << std::endl;
 		return Fun4AllReturnCodes::ABORTRUN;
 	}
 
@@ -221,14 +224,14 @@ int HFMLTriggerInterface::InitRun(PHCompositeNode* topNode)
 		findNode::getClass<PHG4CylinderGeomContainer>(topNode, "CYLINDERGEOM_INTT");
 	if (!m_Geoms2)
 	{
-		std::cout << PHWHERE << "ERROR: Can't find node CYLINDERCELLGEOM_INTT" << std::endl;
+		//std::cout << PHWHERE << "ERROR: Can't find node CYLINDERCELLGEOM_INTT" << std::endl;
 		return Fun4AllReturnCodes::ABORTRUN;
 	}
 
 	m_truthInfo = findNode::getClass<PHG4TruthInfoContainer>(topNode, "G4TruthInfo");
 	if (!m_truthInfo)
 	{
-		std::cout << PHWHERE << "ERROR: Can't find node G4TruthInfo" << std::endl;
+		//std::cout << PHWHERE << "ERROR: Can't find node G4TruthInfo" << std::endl;
 		return Fun4AllReturnCodes::ABORTRUN;
 	}
 
@@ -238,16 +241,36 @@ int HFMLTriggerInterface::InitRun(PHCompositeNode* topNode)
 		cout << "HFMLTriggerInterface::InitRun - WARNING - missing HFMLTrigger_HepMCTriggerFlags" << endl;
 	}
 
+	m_tGeometry = findNode::getClass<ActsGeometry>(topNode, "ActsGeometry");
+	if (!m_tGeometry)
+	{
+		cout << "HFMLTriggerInterface::InitRun - WARNING - missing m_tGeometry" << endl;
+	}
+
+
 	return Fun4AllReturnCodes::EVENT_OK;
 }
 
 int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 {
-	cout << "ROCK" << endl;
+
+	assert(m_tGeometry);
+
+	cout << "ROCK - Runed bro" << endl;
 	// load nodes
 	auto res = load_nodes(topNode);
+	cout << "ROCK - Runed bro - Pass 1.2 " << endl;
+	
 	if (res != Fun4AllReturnCodes::EVENT_OK)
 		return res;
+	cout << "ROCK - Runed bro - Pass 1.4 " << endl;
+/*
+	PHHepMCGenEvent* genevt = nullptr;
+	if(m_GenEventMap->get(_embedding_id)) genevt = m_GenEventMap->get(_embedding_id);
+	if(!genevt) cout << "NO genevt bro" <<endl;
+	cout << "Pass 1.9" << endl;
+*/
+
 
 	/*
 	   if (!_svtxevalstack)
@@ -267,6 +290,8 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 	//  SvtxTrackEval* trackeval = _svtxevalstack->get_track_eval();
 	// SvtxClusterEval* clustereval = _svtxevalstack->get_cluster_eval();
 	//SvtxHitEval* hiteval = _svtxevalstack->get_hit_eval();
+/*
+
 
 	assert(m_GenEventMap);
 
@@ -274,12 +299,10 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 	if (!genevt)
 	{
 		std::cout << PHWHERE << " - Fatal error - node PHHepMCGenEventMap missing subevent with embedding ID " << _embedding_id;
-		std::cout << ". Print PHHepMCGenEventMap:";
+		//std::cout << ". Print PHHepMCGenEventMap:";
 		m_GenEventMap->identify();
-		return Fun4AllReturnCodes::ABORTEVENT;
+		//return Fun4AllReturnCodes::ABORTEVENT;
 	}
-
-
 
 	HepMC::GenEvent* theEvent = genevt->getEvent();
 
@@ -297,12 +320,14 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 		cout << "  - Event record:" << endl;
 		theEvent->print();
 	}
-
+*/
 	// property tree preparation
 	//  using boost::property_tree::ptree;
 	//  ptree pt;
 
 	rapidjson::Document d;
+	cout << "Pass 2" << endl;
+	
 	d.SetObject();
 	rapidjson::Document::AllocatorType& alloc = d.GetAllocator();
 
@@ -333,16 +358,24 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 	// meta data
 	//  ptree metaTree;
 	rapidjson::Value metaTree(rapidjson::kObjectType);
+	cout << "Pass 3" << endl;
 
 	metaTree.AddMember("Description", "These are meta data for this event. Not intended to use in ML algorithm", alloc);
 	metaTree.AddMember("EventID", _ievent, alloc);
 	metaTree.AddMember("Unit", "cm", alloc);
-	metaTree.AddMember("CollisionVertex",
+/*	
+	if(genevt){
+		metaTree.AddMember("CollisionVertex",
 			loadCoordinate(genevt->get_collision_vertex().x(),
 				genevt->get_collision_vertex().y(),
 				genevt->get_collision_vertex().z()),
 			alloc);
+	}
+	else{
 
+		std::cout << "No SUCK - genevt bro" << std::endl;
+	}
+*/
 	metaTree.AddMember("Layer_Count", _nlayers_maps, alloc);
 	metaTree.AddMember("PixelHalfLayerIndex_Count", _nlayers_maps * 2, alloc);
 
@@ -374,6 +407,7 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 
 	//  ptree truthTriggerFlagTree;
 	rapidjson::Value truthTriggerFlagTree(rapidjson::kObjectType);
+	cout << "Pass 4" << endl;
 
 	truthTriggerFlagTree.AddMember("Description",
 			"These are categorical true/false MonteCalo truth tags for the event. These are only known in training sample. This would be trigger output in real data processing.",
@@ -431,6 +465,7 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 
 
 
+	cout << "Pass 5" << endl;
 
 	auto hitset_range = m_hitsets->getHitSets(TrkrDefs::TrkrId::mvtxId);
 	for (auto hitset_iter =  hitset_range.first; hitset_iter != hitset_range.second; ++hitset_iter)
@@ -451,7 +486,7 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 			//	int SUCK = 0;
 			if (g4hit_map.size() != 1)
 			{
-				std::cout << "More than one (" << g4hit_map.size() <<") g4Hit associated to " << hitkey << std::endl;
+				//std::cout << "More than one (" << g4hit_map.size() <<") g4Hit associated to " << hitkey << std::endl;
 				//			SUCK = 1;
 			}
 			rapidjson::Value truthHitTree(rapidjson::kArrayType);
@@ -469,8 +504,8 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 
 				trkid =  g4hit->get_trkid();
 
-				//	if(trkid < 0) cout << "trkid = " << trkid << "   static_cast<uint64_t>(g4hit_key) =  " <<  static_cast<uint64_t>(g4hit_key) << endl;
-				//	if(SUCK == 1) cout << "trkid = " << trkid << "   static_cast<uint64_t>(g4hit_key) =  " <<  static_cast<uint64_t>(g4hit_key) << endl;
+				//	if(trkid < 0)// cout << "trkid = " << trkid << "   static_cast<uint64_t>(g4hit_key) =  " <<  static_cast<uint64_t>(g4hit_key) << endl;
+				//	if(SUCK == 1)// cout << "trkid = " << trkid << "   static_cast<uint64_t>(g4hit_key) =  " <<  static_cast<uint64_t>(g4hit_key) << endl;
 				if(trkid < 0 ) NEGED = static_cast<uint64_t>(g4hit_key);
 
 				//	auto hitid =  g4hit->get_hit_id();
@@ -500,13 +535,23 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 				assert((int)pixel_z < geom->get_NZ());
 				unsigned int chip = MvtxDefs::getChipId(hitsetkey);
 				unsigned int stave = MvtxDefs::getStaveId(hitsetkey);
-				TVector3 local_coords = geom->get_local_coords_from_pixel(pixel_x, pixel_z);
-				TVector3 world_coords = geom->get_world_from_local_coords(stave,
-						0,
-						0,
-						chip,
-						local_coords);
+				auto surface = m_tGeometry->maps().getSiliconSurface(hitsetkey);
 
+
+				TVector3 local_coords = geom->get_local_coords_from_pixel(pixel_x, pixel_z);
+
+				//Add Surface and Act Maps Properties
+
+
+				/*
+				   TVector3 world_coords = geom->get_world_from_local_coords(stave,
+				   0,
+				   0,
+				   chip,
+				   local_coords);
+				   */
+
+				TVector3 world_coords = geom->get_world_from_local_coords(surface, m_tGeometry ,local_coords);
 				//unsigned int halflayer = (int) pixel_x >= geom->get_NX() / 2 ? 0 : 1;
 
 				//unsigned int halfLayerIndex(layer * 2 + halflayer);
@@ -570,651 +615,680 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 		}  //   for (TrkrHitSetContainer::ConstIterator hitset_iter = hitset_range.first;
 	}  //   for (TrkrHitSet::ConstIterator hit_iter = hit_range.first;
 
+	/*
+	   const int NLayerTotalMVTX = 3;
+	   int NStaveLater[NLayerTotalMVTX] = {12, 16, 20};
+	   int NChipMVTX = 9;
+	   int Fire = 0;
+	   int NCol = 1024;
+	   int NRow = 512;
+	   int DoNoisy = 0;
 
-	const int NLayerTotalMVTX = 3;
-	int NStaveLater[NLayerTotalMVTX] = {12, 16, 20};
-	int NChipMVTX = 9;
-	int Fire = 0;
-	int NCol = 1024;
-	int NRow = 512;
-	int DoNoisy = 0;
-	
 
-	float NoiseLevel = 0.000001;
-	
-	double Random; 
+	   float NoiseLevel = 0.000001;
 
+	   double Random; 
 
 
-	if(DoNoisy == 1){
-		rapidjson::Value truthHitTree(rapidjson::kArrayType);
 
-		for(int i = 0; i < NLayerTotalMVTX; i++){
+	   if(DoNoisy == 1){
+	   rapidjson::Value truthHitTree(rapidjson::kArrayType);
 
+	   for(int i = 0; i < NLayerTotalMVTX; i++){
 
-			for(int j = 0; j < NStaveLater[i];j ++){
 
+	   for(int j = 0; j < NStaveLater[i];j ++){
 
-				for(int k = 0; k < NChipMVTX; k++){
 
+	   for(int k = 0; k < NChipMVTX; k++){
 
-					for(int p = 0; p < NCol; p++){
 
-						for(int q = 0;	q < NRow; q++){
-						
-							Fire = 0;
+	   for(int p = 0; p < NCol; p++){
 
-							Random = rand() / double(RAND_MAX);
+	   for(int q = 0;	q < NRow; q++){
 
-							if(Random < NoiseLevel)  Fire = 1;
+	   Fire = 0;
 
-							if(Fire == 1){
+	   Random = rand() / double(RAND_MAX);
 
-								unsigned int chip = k;
-								unsigned int stave = j;
-								unsigned int layer = i;
-							
-								unsigned int pixel_z = p;
-								unsigned int pixel_x = q;
+	   if(Random < NoiseLevel)  Fire = 1;
 
+	   if(Fire == 1){
 
-								CylinderGeom_Mvtx* geom = dynamic_cast<CylinderGeom_Mvtx*>(m_Geoms->GetLayerGeom(layer));
-								assert(geom);
+	   unsigned int chip = k;
+	   unsigned int stave = j;
+	   unsigned int layer = i;
 
-								TVector3 local_coords = geom->get_local_coords_from_pixel(p, q);
-								TVector3 world_coords = geom->get_world_from_local_coords(stave,
-										0,
-										0,
-										chip,
-										local_coords);
+	   unsigned int pixel_z = p;
+	   unsigned int pixel_x = q;
 
 
+	   CylinderGeom_Mvtx* geom = dynamic_cast<CylinderGeom_Mvtx*>(m_Geoms->GetLayerGeom(layer));
+	   assert(geom);
 
-								//      ptree hitTree;
-								rapidjson::Value hitTree(rapidjson::kObjectType);
-					//			truthHitTree.PushBack(-9999,alloc);
-								int trkid = -9999;
-								//      ptree hitIDTree;
-								rapidjson::Value hitIDTree(rapidjson::kObjectType);
-								hitIDTree.AddMember("HitSequenceInEvent", hitID, alloc);
-					//			hitIDTree.AddMember("G4HitAssoc", truthHitTree, alloc);
-								hitIDTree.AddMember("MVTXTrkID", trkid, alloc);
+	   TVector3 local_coords = geom->get_local_coords_from_pixel(p, q);
+	   auto surface = m_tGeometry->maps().getSiliconSurface(hitsetkey);
 
-								//hitIDTree.AddMember("PixelHalfLayerIndex", halfLayerIndex, alloc);
-								//hitIDTree.AddMember("PixelPhiIndexInLayer", pixelPhiIndex, alloc);
-								//hitIDTree.AddMember("PixelPhiIndexInHalfLayer", pixelPhiIndexHL, alloc);
-								//hitIDTree.AddMember("PixelZIndex", pixelZIndex, alloc);
+	   TVector3 world_coords = geom->get_world_from_local_coords(surface, m_tGeometry ,local_coords);
 
-								hitIDTree.AddMember("Layer", layer, alloc);
-								//hitIDTree.AddMember("HalfLayer", halflayer, alloc);
-								hitIDTree.AddMember("Stave", stave, alloc);
-								//      hitIDTree.put("HalfStave", cell->get_half_stave_index());
-								//      hitIDTree.put("Module", cell->get_module_index());
-								hitIDTree.AddMember("Chip", chip, alloc);
-								hitIDTree.AddMember("Pixel_x", pixel_x, alloc);
-								hitIDTree.AddMember("Pixel_z", pixel_z, alloc);
-								hitTree.AddMember("ID", hitIDTree, alloc);
 
-								hitTree.AddMember("Coordinate",
-										loadCoordinate(world_coords.x(),
-											world_coords.y(),
-											world_coords.z()),
-										alloc);
+	//      ptree hitTree;
+	rapidjson::Value hitTree(rapidjson::kObjectType);
+	//			truthHitTree.PushBack(-9999,alloc);
+	int trkid = -9999;
+	//      ptree hitIDTree;
+	rapidjson::Value hitIDTree(rapidjson::kObjectType);
+	hitIDTree.AddMember("HitSequenceInEvent", hitID, alloc);
+	//			hitIDTree.AddMember("G4HitAssoc", truthHitTree, alloc);
+	hitIDTree.AddMember("MVTXTrkID", trkid, alloc);
 
-								//      rawHitsTree.add_child("MVTXHit", hitTree);
-								rawHitsTree.PushBack(hitTree, alloc);
+	//hitIDTree.AddMember("PixelHalfLayerIndex", halfLayerIndex, alloc);
+	//hitIDTree.AddMember("PixelPhiIndexInLayer", pixelPhiIndex, alloc);
+	//hitIDTree.AddMember("PixelPhiIndexInHalfLayer", pixelPhiIndexHL, alloc);
+	//hitIDTree.AddMember("PixelZIndex", pixelZIndex, alloc);
 
-								m_hitStaveLayer->Fill(stave, layer);
-								m_hitModuleHalfStave->Fill(stave, layer);
-								m_hitChipModule->Fill(chip, stave);
+	hitIDTree.AddMember("Layer", layer, alloc);
+	//hitIDTree.AddMember("HalfLayer", halflayer, alloc);
+	hitIDTree.AddMember("Stave", stave, alloc);
+	//      hitIDTree.put("HalfStave", cell->get_half_stave_index());
+	//      hitIDTree.put("Module", cell->get_module_index());
+	hitIDTree.AddMember("Chip", chip, alloc);
+	hitIDTree.AddMember("Pixel_x", pixel_x, alloc);
+	hitIDTree.AddMember("Pixel_z", pixel_z, alloc);
+	hitTree.AddMember("ID", hitIDTree, alloc);
 
-								m_hitLayerMap->Fill(world_coords.x(), world_coords.y(), layer);
-								//m_hitPixelPhiMap->Fill(pixelPhiIndex, atan2(world_coords.y(), world_coords.x()), layer);
-								//m_hitPixelPhiMapHL->Fill(pixelPhiIndexHL, atan2(world_coords.y(), world_coords.x()), layer);
-								//m_hitPixelZMap->Fill(pixelZIndex, world_coords.z(), halfLayerIndex);
-
-								MVTXHitX[MVTXHitSize] = world_coords.x();
-								MVTXHitY[MVTXHitSize] = world_coords.y();
-								MVTXHitZ[MVTXHitSize] = world_coords.z();
-								MVTXTrkID[MVTXHitSize] = trkid;
-								LayerID[HitSize] = layer;
-								++hitID;
-								MVTXHitSize = MVTXHitSize + 1;
-								HitSize = HitSize + 1;
-
-
-
-
-
-
-							}
-
-
-
-						}
-
-
-
-					}
-
-
-				}
-
-			}
-
-
-		}
-
-
-
-	}
-
-
-
-	rawHitTree.AddMember("MVTXHits", rawHitsTree, alloc);
-	rapidjson::Value rawHitsTree2(rapidjson::kArrayType);
-
-
-	TrkrHitSetContainer::ConstRange hitset_range_intt = m_hitsets->getHitSets(TrkrDefs::TrkrId::inttId);
-
-	int INTTHITS = 0;
-	unsigned int hitIDINTT(0);
-
-	vector<int> TrkIDVecINTT;
-	vector<int> HitIDVecINTT;
-	vector<uint64_t> KeyIDVecINTT;
-
-
-	INTTHitSize = 0;
-
-
-
-	for (TrkrHitSetContainer::ConstIterator hitset_iter = hitset_range_intt.first;
-			hitset_iter != hitset_range_intt.second;
-			++hitset_iter)
-	{
-		//	  TrkrDefs::hitsetkey hitSetKey = hitset_iter->first;
-		auto hitsetkey = hitset_iter->first;
-
-		TrkrHitSet::ConstRange hit_range = hitset_iter->second->getHits();
-		for (TrkrHitSet::ConstIterator hit_iter = hit_range.first;
-				hit_iter != hit_range.second;
-				++hit_iter)
-		{
-
-			//		cout << "Pass 1" << endl;
-			TrkrDefs::hitkey hitKey = hit_iter->first;
-			TrkrHit* hit = hit_iter->second;
-			assert(hit);
-			unsigned int layer = TrkrDefs::getLayer(hitset_iter->first);
-			//	cout << "Pass 2" << "   layer = " << layer  << endl;
-
-
-			int trkid;		
-			// get truth hit assoc
-			TrkrHitTruthAssoc::MMap g4hit_map;
-			m_hit_truth_map->getG4Hits(hitsetkey, hitKey, g4hit_map);
-			if (g4hit_map.size() != 1)
-			{
-				std::cout << "More than one (" << g4hit_map.size() <<") g4Hit associated to " << hitKey << std::endl;
-			}
-			rapidjson::Value truthHitTree(rapidjson::kArrayType);
-			for (auto truth_iter = g4hit_map.begin(); truth_iter != g4hit_map.end(); ++truth_iter)
-			{
-				// g4hit key
-				const auto g4hit_key = truth_iter->second.second;
-				truthHitTree.PushBack(static_cast<uint64_t>(g4hit_key), alloc);
-
-				PHG4Hit *g4hit = m_g4hits_intt->findHit( static_cast<uint64_t>(g4hit_key) );
-
-				trkid =  g4hit->get_trkid();
-				HitIDVecINTT.push_back(hitIDINTT);	
-				TrkIDVecINTT.push_back(trkid);
-				KeyIDVecINTT.push_back(static_cast<uint64_t>(g4hit_key) );
-
-				//	auto hitid =  g4hit->get_hit_id();
-
-				//	HitInfo_INTT[trkid].push_back(hitIDINTT);
-				//cout << "INTT:: trkid =  " << trkid << endl;
-
-				//	cout << "INTT: trkid =  " << trkid << "  hitIDINTT =  " << hitIDINTT << endl;
-
-			}
-
-
-			if(layer > _nlayers_maps-1){
-
-				CylinderGeomIntt* geom = dynamic_cast<CylinderGeomIntt*>(m_Geoms2->GetLayerGeom(layer));
-				//		cout << "Pass 3" << endl;
-
-
-				unsigned int Row = InttDefs::getRow(hitKey);
-				unsigned int Col = InttDefs::getCol(hitKey);
-				unsigned int LadderZId = InttDefs::getLadderZId(hitsetkey);
-				unsigned int LadderPhiId = InttDefs::getLadderPhiId(hitsetkey);
-
-
-
-
-
-				double hit_location[3] = {0.0, 0.0, 0.0};
-
-				geom->find_strip_center(LadderZId,
-						LadderPhiId,
-						Col,
-						Row,
-						hit_location);
-
-
-				rapidjson::Value hitTree2(rapidjson::kObjectType);
-
-				rapidjson::Value hitIDTree2(rapidjson::kObjectType);
-
-				//int inttlayer = layer - _nlayers_maps;
-				hitIDTree2.AddMember("HitSequenceInEvent", hitIDINTT, alloc);
-				hitIDTree2.AddMember("G4HitAssoc", truthHitTree, alloc);	
-				hitIDTree2.AddMember("INTTTrkID", trkid, alloc);
-
-				hitIDTree2.AddMember("Layer", layer, alloc);
-				hitIDTree2.AddMember("Row", Row, alloc);
-				hitIDTree2.AddMember("Col", Col, alloc);
-				hitIDTree2.AddMember("LadderZId", LadderZId, alloc);
-				hitIDTree2.AddMember("LadderPhiId", LadderPhiId, alloc);
-
-				hitTree2.AddMember("ID", hitIDTree2, alloc);
-
-				/*
-				   cout << "layer = " << layer << endl;
-				   cout << "Pixel_x = " << pixel_x << endl;
-				   cout << "Pixel_z = " << pixel_z << endl;
-				   cout << "LadderZId = " << LadderZId << endl;
-				   cout << "LadderPhiId = " << LadderPhiId << endl;
-				   */
-
-				hitTree2.AddMember("Coordinate",	loadCoordinate(hit_location[0], hit_location[1], hit_location[2]),	alloc);
-
-				//cout << "Pass 4" << endl;
-				rawHitsTree2.PushBack(hitTree2, alloc);
-
-
-				//		rawHitTree.PushBack(hitTree2, alloc);
-
-				m_hitLayerMap->Fill(hit_location[0], hit_location[1], layer);
-				INTTHitX[INTTHitSize] = hit_location[0];
-				INTTHitY[INTTHitSize] = hit_location[1];
-				INTTHitZ[INTTHitSize] = hit_location[2];
-				INTTTrkID[INTTHitSize] = trkid;
-				LadderZIdSave[INTTHitSize] = LadderZId;
-				LadderPhiIdSave[INTTHitSize] = LadderPhiId;
-				RowSave[INTTHitSize] = Row;
-				ColSave[INTTHitSize] = Col;
-
-				LayerID[HitSize] = layer;
-
-
-				hitIDINTT++;
-				INTTHitSize = INTTHitSize + 1;
-				HitSize = HitSize + 1;
-
-			}
-
-			//	cout << "Pass 5" << endl;
-
-		}
-
-		INTTHITS = INTTHITS + 1;
-
-	}
-
-	rawHitTree.AddMember("INTTHITS", rawHitsTree2, alloc);
-
-	//	cout << "Pass 6" << endl;
-
-	//	cout << "ZZ Check: INTTHITS = " << INTTHITS << endl;
-
-
-
-
-	vector<int> IndexVec;
-	vector<int> IndexVecINTT;
-
-
-	// Truth hits
-	//  ptree truthHitTree;
-	rapidjson::Value truthHitTree(rapidjson::kObjectType);
-	truthHitTree.AddMember("Description", "From the MonteCalo truth information, pairs of track ID and subset of RawHit that belong to the track. These are not presented in real data. The track ID is arbitary.",
+	hitTree.AddMember("Coordinate",
+			loadCoordinate(world_coords.x(),
+				world_coords.y(),
+				world_coords.z()),
 			alloc);
 
-	//MVTX
+	//      rawHitsTree.add_child("MVTXHit", hitTree);
+	rawHitsTree.PushBack(hitTree, alloc);
 
-	assert(m_g4hits_mvtx);
-	std::multimap<const int, const unsigned long long> m_track_g4hits_map;
-	for (auto g4hit_iter = m_g4hits_mvtx->getHits().first;
-			g4hit_iter != m_g4hits_mvtx->getHits().second;
-			++g4hit_iter)
+	m_hitStaveLayer->Fill(stave, layer);
+	m_hitModuleHalfStave->Fill(stave, layer);
+	m_hitChipModule->Fill(chip, stave);
+
+	m_hitLayerMap->Fill(world_coords.x(), world_coords.y(), layer);
+	//m_hitPixelPhiMap->Fill(pixelPhiIndex, atan2(world_coords.y(), world_coords.x()), layer);
+	//m_hitPixelPhiMapHL->Fill(pixelPhiIndexHL, atan2(world_coords.y(), world_coords.x()), layer);
+	//m_hitPixelZMap->Fill(pixelZIndex, world_coords.z(), halfLayerIndex);
+
+	MVTXHitX[MVTXHitSize] = world_coords.x();
+	MVTXHitY[MVTXHitSize] = world_coords.y();
+	MVTXHitZ[MVTXHitSize] = world_coords.z();
+	MVTXTrkID[MVTXHitSize] = trkid;
+	LayerID[HitSize] = layer;
+	++hitID;
+	MVTXHitSize = MVTXHitSize + 1;
+	HitSize = HitSize + 1;
+
+
+
+
+
+
+}
+
+
+
+}
+
+
+
+}
+
+
+}
+
+}
+
+
+}
+
+
+
+}
+
+*/
+	cout << "Pass 6" << endl;
+
+rawHitTree.AddMember("MVTXHits", rawHitsTree, alloc);
+rapidjson::Value rawHitsTree2(rapidjson::kArrayType);
+
+
+TrkrHitSetContainer::ConstRange hitset_range_intt = m_hitsets->getHitSets(TrkrDefs::TrkrId::inttId);
+
+int INTTHITS = 0;
+unsigned int hitIDINTT(0);
+
+vector<int> TrkIDVecINTT;
+vector<int> HitIDVecINTT;
+vector<uint64_t> KeyIDVecINTT;
+
+
+INTTHitSize = 0;
+
+
+////      cout << "Pass 1 new" << endl;
+
+for (TrkrHitSetContainer::ConstIterator hitset_iter = hitset_range_intt.first;
+		hitset_iter != hitset_range_intt.second;
+		++hitset_iter)
+{
+	//	  TrkrDefs::hitsetkey hitSetKey = hitset_iter->first;
+	auto hitsetkey = hitset_iter->first;
+
+	TrkrHitSet::ConstRange hit_range = hitset_iter->second->getHits();
+	for (TrkrHitSet::ConstIterator hit_iter = hit_range.first;
+			hit_iter != hit_range.second;
+			++hit_iter)
 	{
-		PHG4Hit *g4hit = g4hit_iter->second;
 
-		//	if(g4hit->get_hit_id() == NEGED) cout << "g4hit->get_hitid() = " << g4hit->get_hit_id() << "      g4hit->get_trkid()  = " << g4hit->get_trkid() << endl;
+	//      cout << "Pass 1" << endl;
+		TrkrDefs::hitkey hitKey = hit_iter->first;
+		TrkrHit* hit = hit_iter->second;
+		assert(hit);
+		unsigned int layer = TrkrDefs::getLayer(hitset_iter->first);
+	//      cout << "Pass 2" << "   layer = " << layer  << endl;
 
-		//int trkidCheck  = g4hit->get_trkid();
 
-		//PHG4Particle * ParticleDebug =  m_truthInfo->GetParticle(trkidCheck);
+		int trkid;		
+		// get truth hit assoc
+		TrkrHitTruthAssoc::MMap g4hit_map;
+		m_hit_truth_map->getG4Hits(hitsetkey, hitKey, g4hit_map);
+		if (g4hit_map.size() != 1)
+		{
+			//std::cout << "More than one (" << g4hit_map.size() <<") g4Hit associated to " << hitKey << std::endl;
+		}
+		rapidjson::Value truthHitTree(rapidjson::kArrayType);
+		for (auto truth_iter = g4hit_map.begin(); truth_iter != g4hit_map.end(); ++truth_iter)
+		{
+			// g4hit key
+			const auto g4hit_key = truth_iter->second.second;
+			truthHitTree.PushBack(static_cast<uint64_t>(g4hit_key), alloc);
 
-		//		cout << "g4hit->get_hitid() = " << g4hit->get_hit_id() << "      g4hit->get_trkid()  = " << g4hit->get_trkid() << "   ParticleDebug->get_pid() =  " << ParticleDebug->get_pid() << endl;
+			PHG4Hit *g4hit = m_g4hits_intt->findHit( static_cast<uint64_t>(g4hit_key) );
 
-		m_track_g4hits_map.insert(make_pair(g4hit->get_trkid(), g4hit_iter->first));
+			trkid =  g4hit->get_trkid();
+			HitIDVecINTT.push_back(hitIDINTT);	
+			TrkIDVecINTT.push_back(trkid);
+			KeyIDVecINTT.push_back(static_cast<uint64_t>(g4hit_key) );
+
+			//	auto hitid =  g4hit->get_hit_id();
+
+			//	HitInfo_INTT[trkid].push_back(hitIDINTT);
+			//cout << "INTT:: trkid =  " << trkid << endl;
+
+			//	cout << "INTT: trkid =  " << trkid << "  hitIDINTT =  " << hitIDINTT << endl;
+
+		}
+
+
+		if(layer > _nlayers_maps-1){
+
+			CylinderGeomIntt* geom = dynamic_cast<CylinderGeomIntt*>(m_Geoms2->GetLayerGeom(layer));
+		//      cout << "Pass 3" << endl;
+
+
+			unsigned int Row = InttDefs::getRow(hitKey);
+			unsigned int Col = InttDefs::getCol(hitKey);
+			unsigned int LadderZId = InttDefs::getLadderZId(hitsetkey);
+			unsigned int LadderPhiId = InttDefs::getLadderPhiId(hitsetkey);
+
+
+
+		//      cout << "Pass 3.5" << endl;
+
+
+			double hit_location[3] = {0.0, 0.0, 0.0};
+
+			geom->find_strip_center(LadderZId,
+					LadderPhiId,
+					Col,
+					Row,
+					hit_location);
+
+
+			rapidjson::Value hitTree2(rapidjson::kObjectType);
+		//      cout << "Pass 4" << endl;
+
+			rapidjson::Value hitIDTree2(rapidjson::kObjectType);
+
+			//int inttlayer = layer - _nlayers_maps;
+			hitIDTree2.AddMember("HitSequenceInEvent", hitIDINTT, alloc);
+			hitIDTree2.AddMember("G4HitAssoc", truthHitTree, alloc);	
+			hitIDTree2.AddMember("INTTTrkID", trkid, alloc);
+
+			hitIDTree2.AddMember("Layer", layer, alloc);
+			hitIDTree2.AddMember("Row", Row, alloc);
+			hitIDTree2.AddMember("Col", Col, alloc);
+			hitIDTree2.AddMember("LadderZId", LadderZId, alloc);
+			hitIDTree2.AddMember("LadderPhiId", LadderPhiId, alloc);
+
+			hitTree2.AddMember("ID", hitIDTree2, alloc);
+
+			/*
+			  // cout << "layer = " << layer << endl;
+			  // cout << "Pixel_x = " << pixel_x << endl;
+			  // cout << "Pixel_z = " << pixel_z << endl;
+			  // cout << "LadderZId = " << LadderZId << endl;
+			  // cout << "LadderPhiId = " << LadderPhiId << endl;
+			   */
+
+			hitTree2.AddMember("Coordinate",	loadCoordinate(hit_location[0], hit_location[1], hit_location[2]),	alloc);
+
+			//cout << "Pass 4" << endl;
+			rawHitsTree2.PushBack(hitTree2, alloc);
+
+
+			//		rawHitTree.PushBack(hitTree2, alloc);
+
+			m_hitLayerMap->Fill(hit_location[0], hit_location[1], layer);
+			INTTHitX[INTTHitSize] = hit_location[0];
+			INTTHitY[INTTHitSize] = hit_location[1];
+			INTTHitZ[INTTHitSize] = hit_location[2];
+			INTTTrkID[INTTHitSize] = trkid;
+			LadderZIdSave[INTTHitSize] = LadderZId;
+			LadderPhiIdSave[INTTHitSize] = LadderPhiId;
+			RowSave[INTTHitSize] = Row;
+			ColSave[INTTHitSize] = Col;
+
+			LayerID[HitSize] = layer;
+
+
+			hitIDINTT++;
+			INTTHitSize = INTTHitSize + 1;
+			HitSize = HitSize + 1;
+
+		}
+
+	//      cout << "Pass 5" << endl;
+
 	}
+
+	INTTHITS = INTTHITS + 1;
+
+}
+
+rawHitTree.AddMember("INTTHITS", rawHitsTree2, alloc);
+
+cout << "Pass 6" << endl;
+
+//	cout << "ZZ Check: INTTHITS = " << INTTHITS << endl;
+
+
+
+
+vector<int> IndexVec;
+vector<int> IndexVecINTT;
+
+
+// Truth hits
+//  ptree truthHitTree;
+rapidjson::Value truthHitTree(rapidjson::kObjectType);
+truthHitTree.AddMember("Description", "From the MonteCalo truth information, pairs of track ID and subset of RawHit that belong to the track. These are not presented in real data. The track ID is arbitary.",
+		alloc);
+
+//MVTX
+
+assert(m_g4hits_mvtx);
+std::multimap<const int, const unsigned long long> m_track_g4hits_map;
+for (auto g4hit_iter = m_g4hits_mvtx->getHits().first;
+		g4hit_iter != m_g4hits_mvtx->getHits().second;
+		++g4hit_iter)
+{
+	PHG4Hit *g4hit = g4hit_iter->second;
+
+	//	if(g4hit->get_hit_id() == NEGED)// cout << "g4hit->get_hitid() = " << g4hit->get_hit_id() << "      g4hit->get_trkid()  = " << g4hit->get_trkid() << endl;
+
+	//int trkidCheck  = g4hit->get_trkid();
+
+	//PHG4Particle * ParticleDebug =  m_truthInfo->GetParticle(trkidCheck);
+
+	//		cout << "g4hit->get_hitid() = " << g4hit->get_hit_id() << "      g4hit->get_trkid()  = " << g4hit->get_trkid() << "   ParticleDebug->get_pid() =  " << ParticleDebug->get_pid() << endl;
+
+	m_track_g4hits_map.insert(make_pair(g4hit->get_trkid(), g4hit_iter->first));
+}
+
+
+//INTT
+
+
+assert(m_g4hits_intt);
+std::multimap<const int, const unsigned long long> m_track_g4hits_map_intt;
+for (auto g4hit_iter = m_g4hits_intt->getHits().first;
+		g4hit_iter != m_g4hits_intt->getHits().second;
+		++g4hit_iter)
+{
+	PHG4Hit *g4hit = g4hit_iter->second;
+	m_track_g4hits_map_intt.insert(make_pair(g4hit->get_trkid(), g4hit_iter->first));
+}
+
+
+//  ptree truthTracksTree;
+rapidjson::Value truthTracksTree(rapidjson::kArrayType);
+// get set of primary particle
+assert(m_truthInfo);
+//	auto pp_range = m_truthInfo->GetPrimaryParticleRange();
+auto pp_range = m_truthInfo->GetParticleRange();
+
+NTruthTrks = 0;
+int ParentPDGID;
+int ParentTrkID;
+
+	PHG4Particle *mother = nullptr;
+
+
+for (auto pp_iter = pp_range.first;
+		pp_iter != pp_range.second;
+		++pp_iter)
+{
+
+	PHG4Particle *g4particle = pp_iter->second;
+	assert(g4particle);
+	//  vtx = trutheval->get_vertex(g4particle);
+
+	ParentPDGID = 999;
+	ParentTrkID = -999;
+
+
+
+	if (g4particle->get_parent_id() == 0)
+	{
+		ParentPDGID = 0;
+	}
+	else
+	{
+		mother = m_truthInfo->GetParticle(g4particle->get_parent_id());
+		ParentPDGID = mother->get_pid();
+		ParentTrkID = mother->get_track_id();
+
+
+	}
+
+	//if(abs(ParentPDGID) > 400 && abs(ParentPDGID)  < 500) cout << "ParentPDGID = " << ParentPDGID << "   ParentTrkID = " << ParentTrkID << std::endl; 
+	if(abs(ParentPDGID) == 421) cout << "ParentPDGID = " << ParentPDGID << "   ParentTrkID = " << ParentTrkID << std::endl; 
+
+	vtx = m_truthInfo->GetVtx(g4particle->get_vtx_id());
+
+
+	TruthTrkID[NTruthTrks] = g4particle->get_track_id();
+
+	OriginX[NTruthTrks] = vtx->get_x();
+	OriginY[NTruthTrks] = vtx->get_y();
+	OriginZ[NTruthTrks] = vtx->get_z();
+
+	OriginR[NTruthTrks] = sqrt( vtx->get_x() *  vtx->get_x()  +  vtx->get_y() *  vtx->get_y() +  vtx->get_z() *  vtx->get_z());
+	OriginRho[NTruthTrks] = sqrt(vtx->get_x() *  vtx->get_x()  +  vtx->get_y() *  vtx->get_y() );
+
+	NTruthTrks = NTruthTrks + 1;
+
+
+	if (! m_track_g4hits_map.count(g4particle->get_track_id()))
+	{
+		if (Verbosity() >= VERBOSITY_MORE)
+	//		std::cout << "WARNING: G4 particle " << g4particle->get_track_id() << " does not hit any MVTX layer." << std::endl;
+		continue;
+	}
+	if (! m_track_g4hits_map_intt.count(g4particle->get_track_id()))
+	{
+		if (Verbosity() >= VERBOSITY_MORE)
+			//  std::cout << "WARNING: G4 particle " << g4particle->get_track_id() 			<< " does not hit any INTT layer." << std::endl;
+		continue;
+	}
+
+
+	//    ptree trackHitTree;OriginX
+	//rapidjson::Document trackHitTree;
+
+	rapidjson::Value trackHitTree(rapidjson::kArrayType);
+
+
+
+	rapidjson::Value MVTXHitIDTree(rapidjson::kArrayType);
+	rapidjson::Value MVTXHitIDTree2(rapidjson::kArrayType);
+
+
+	int trkid = g4particle->get_track_id();
+//	int pid = g4particle->get_pid();
+//	int parentid = g4particle->get_parent_id();
+//	int primaryid = g4particle->get_primary_id();
+//	int vtxid = g4particle->get_vtx_id();
+
+	//if(trkid < 0)  cout << "pid = " << pid << "   parentid = " << parentid  << "   primaryid = " << primaryid << "   vtxid = " << vtxid << endl;
+		
+	//MVTX
+	int LayerHere = 0;
+	auto g4hits_iter = m_track_g4hits_map.equal_range(g4particle->get_track_id());
+
+	//if(g4particle->get_track_id() < 0)	cout << "g4particle->get_track_id() = " << g4particle->get_track_id() << endl;
+	//	cout << "g4particle->get_track_id() = " << g4particle->get_track_id() << endl;
+
+	for (auto& g4hit_iter = g4hits_iter.first;
+			g4hit_iter != g4hits_iter.second; ++g4hit_iter)
+	{
+		//          ptree hitIDTree;
+		//          hitIDTree.put("", g4hit_key);
+		//	int Info[2];
+		//	HitInFoVec.first = LayerHere;
+		//	HitInFoVec.second =  static_cast<uint64_t>(g4hit_iter->second);
+
+
+
+
+		//	cout << "HitInfo[trkid].size() = " << HitInfo[trkid].size() << endl;
+
+		rapidjson::Value trackHitTree2(rapidjson::kArrayType);
+
+		trackHitTree2.PushBack(LayerHere, alloc);
+		trackHitTree2.PushBack(static_cast<uint64_t>(g4hit_iter->second), alloc);
+
+		/*
+		   PHG4Hit *g4hit = m_g4hits_mvtx->findHit( static_cast<uint64_t>(g4hit_iter->second) );
+		   if(g4hit->get_trkid() < 0){
+		  // cout << "g4hit->get_hitid() = " << g4hit->get_hit_id() << "      g4hit->get_trkid()  = " << g4hit->get_trkid() << "  g4particle->get_track_id() = " << g4particle->get_track_id() << "   g4particle->get_pid() = " <<  g4particle->get_pid() << endl;
+
+
+		   }
+		   */
+		trackHitTree.PushBack(trackHitTree2, alloc);
+
+		//    rapidjson::Value LayerID(LayerHere, alloc);
+		//    rapidjson::Value TruthHitKey(static_cast<uint64_t>(g4hit_iter->second), alloc);
+		//	trackHitTree.AddMember(LayerID,TruthHitKey, alloc);
+		LayerHere = LayerHere + 1;
+
+
+		IndexVec.clear();
+
+		int KeyIDVecSize = KeyIDVec.size();
+
+		for(int i = 0; i < KeyIDVecSize; i++){
+
+
+			if(static_cast<uint64_t>(g4hit_iter->second) == KeyIDVec[i]) IndexVec.push_back(i);
+
+		}
+		int	HitSize = IndexVec.size();
+		//		cout << "HitSize = " << HitSize << endl;
+
+		for(int i = 0; i < HitSize; i++){
+
+			int IndexID = IndexVec[i];
+
+			MVTXHitIDTree2.PushBack(HitIDVec[IndexID],alloc);
+
+
+		}
+
+
+
+
+
+	}  //   for (auto& clus_key : clus_keys)
+
+
+
+
+
+	MVTXHitIDTree.PushBack(MVTXHitIDTree2, alloc);
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 	//INTT
+//      cout << "Pass 6.6" << endl;
 
 
-	assert(m_g4hits_intt);
-	std::multimap<const int, const unsigned long long> m_track_g4hits_map_intt;
-	for (auto g4hit_iter = m_g4hits_intt->getHits().first;
-			g4hit_iter != m_g4hits_intt->getHits().second;
-			++g4hit_iter)
+	rapidjson::Value INTTHitIDTree(rapidjson::kArrayType);
+	rapidjson::Value INTTHitIDTree2(rapidjson::kArrayType);
+
+//      cout << "Pass 6.7" << endl;
+
+	auto g4hits_iter_intt = m_track_g4hits_map_intt.equal_range(g4particle->get_track_id());
+
+
+
+
+
+
+
+
+
+	LayerHere = 3;
+
+	for (auto& g4hit_iter = g4hits_iter_intt.first;
+			g4hit_iter != g4hits_iter_intt.second; ++g4hit_iter)
 	{
-		PHG4Hit *g4hit = g4hit_iter->second;
-		m_track_g4hits_map_intt.insert(make_pair(g4hit->get_trkid(), g4hit_iter->first));
-	}
-
-
-	//  ptree truthTracksTree;
-	rapidjson::Value truthTracksTree(rapidjson::kArrayType);
-	// get set of primary particle
-	assert(m_truthInfo);
-	//	auto pp_range = m_truthInfo->GetPrimaryParticleRange();
-	auto pp_range = m_truthInfo->GetParticleRange();
-
-	NTruthTrks = 0;
-
-	for (auto pp_iter = pp_range.first;
-			pp_iter != pp_range.second;
-			++pp_iter)
-	{
-
-		PHG4Particle *g4particle = pp_iter->second;
-		assert(g4particle);
-		//  vtx = trutheval->get_vertex(g4particle);
+		//          ptree hitIDTree;
+		//          hitIDTree.put("", g4hit_key);
+		//	int Info[2];
+		//	HitInFoVec.first = LayerHere;
+		//	HitInFoVec.second =  static_cast<uint64_t>(g4hit_iter->second);
 
 
 
-		vtx = m_truthInfo->GetVtx(g4particle->get_vtx_id());
+
+		//	cout << "HitInfo[trkid].size() = " << HitInfo[trkid].size() << endl;
+
+		rapidjson::Value trackHitTree2(rapidjson::kArrayType);
+
+		trackHitTree2.PushBack(LayerHere, alloc);
+		trackHitTree2.PushBack(static_cast<uint64_t>(g4hit_iter->second), alloc);
+
+		trackHitTree.PushBack(trackHitTree2, alloc);
+
+		//    rapidjson::Value LayerID(LayerHere, alloc);
+		//    rapidjson::Value TruthHitKey(static_cast<uint64_t>(g4hit_iter->second), alloc);
+		//	trackHitTree.AddMember(LayerID,TruthHitKey, alloc);
+		LayerHere = LayerHere + 1;
 
 
-		TruthTrkID[NTruthTrks] = g4particle->get_track_id();
-
-		OriginX[NTruthTrks] = vtx->get_x();
-		OriginY[NTruthTrks] = vtx->get_y();
-		OriginZ[NTruthTrks] = vtx->get_z();
-
-		OriginR[NTruthTrks] = sqrt( vtx->get_x() *  vtx->get_x()  +  vtx->get_y() *  vtx->get_y() +  vtx->get_z() *  vtx->get_z());
-		OriginRho[NTruthTrks] = sqrt(vtx->get_x() *  vtx->get_x()  +  vtx->get_y() *  vtx->get_y() );
-
-		NTruthTrks = NTruthTrks + 1;
+		IndexVecINTT.clear();
 
 
-		if (! m_track_g4hits_map.count(g4particle->get_track_id()))
-		{
-			if (Verbosity() >= VERBOSITY_MORE)
-				std::cout << "WARNING: G4 particle " << g4particle->get_track_id() \
-					<< " does not hit any MVTX layer." << std::endl;
-			continue;
-		}
-		if (! m_track_g4hits_map_intt.count(g4particle->get_track_id()))
-		{
-			if (Verbosity() >= VERBOSITY_MORE)
-				std::cout << "WARNING: G4 particle " << g4particle->get_track_id() \
-					<< " does not hit any INTT layer." << std::endl;
-			continue;
+
+
+	//      cout << "Pass 6.10" << endl;
+
+
+		int KeyIDVecSize_intt = KeyIDVecINTT.size();
+
+
+
+
+
+
+	//      cout << "Pass 6.11" << endl;
+
+		for(int i = 0; i < KeyIDVecSize_intt; i++){
+
+
+			if(static_cast<uint64_t>(g4hit_iter->second) == KeyIDVecINTT[i]) IndexVecINTT.push_back(i);
+
 		}
 
+	//      cout << "Pass 6.12" << endl;
 
-		//    ptree trackHitTree;OriginX
-		//rapidjson::Document trackHitTree;
+		int	HitSize_intt = IndexVecINTT.size();
 
-		rapidjson::Value trackHitTree(rapidjson::kArrayType);
+//		cout << "HitSize_intt = " << HitSize_intt << endl;
 
+		for(int i = 0; i < HitSize_intt; i++){
 
+			int IndexID = IndexVecINTT[i];
 
-		rapidjson::Value MVTXHitIDTree(rapidjson::kArrayType);
-		rapidjson::Value MVTXHitIDTree2(rapidjson::kArrayType);
 
+			INTTHitIDTree2.PushBack(HitIDVecINTT[IndexID],alloc);
 
-		int trkid = g4particle->get_track_id();
-		int pid = g4particle->get_pid();
-		int parentid = g4particle->get_parent_id();
-		int primaryid = g4particle->get_primary_id();
-		int vtxid = g4particle->get_vtx_id();
+		}
 
-		if(trkid < 0) cout << "pid = " << pid << "   parentid = " << parentid  << "   primaryid = " << primaryid << "   vtxid = " << vtxid << endl;
 
-		//MVTX
-		int LayerHere = 0;
-		auto g4hits_iter = m_track_g4hits_map.equal_range(g4particle->get_track_id());
 
-		//if(g4particle->get_track_id() < 0)	cout << "g4particle->get_track_id() = " << g4particle->get_track_id() << endl;
-		//	cout << "g4particle->get_track_id() = " << g4particle->get_track_id() << endl;
 
-		for (auto& g4hit_iter = g4hits_iter.first;
-				g4hit_iter != g4hits_iter.second; ++g4hit_iter)
-		{
-			//          ptree hitIDTree;
-			//          hitIDTree.put("", g4hit_key);
-			//	int Info[2];
-			//	HitInFoVec.first = LayerHere;
-			//	HitInFoVec.second =  static_cast<uint64_t>(g4hit_iter->second);
 
+	}  //   for (auto& clus_key : clus_keys)
 
 
 
-			//	cout << "HitInfo[trkid].size() = " << HitInfo[trkid].size() << endl;
 
-			rapidjson::Value trackHitTree2(rapidjson::kArrayType);
 
-			trackHitTree2.PushBack(LayerHere, alloc);
-			trackHitTree2.PushBack(static_cast<uint64_t>(g4hit_iter->second), alloc);
+	INTTHitIDTree.PushBack(INTTHitIDTree2, alloc);
 
-			/*
-			   PHG4Hit *g4hit = m_g4hits_mvtx->findHit( static_cast<uint64_t>(g4hit_iter->second) );
-			   if(g4hit->get_trkid() < 0){
-			   cout << "g4hit->get_hitid() = " << g4hit->get_hit_id() << "      g4hit->get_trkid()  = " << g4hit->get_trkid() << "  g4particle->get_track_id() = " << g4particle->get_track_id() << "   g4particle->get_pid() = " <<  g4particle->get_pid() << endl;
 
 
-			   }
-			   */
-			trackHitTree.PushBack(trackHitTree2, alloc);
+//      cout << "Pass 6.13" << endl;
 
-			//    rapidjson::Value LayerID(LayerHere, alloc);
-			//    rapidjson::Value TruthHitKey(static_cast<uint64_t>(g4hit_iter->second), alloc);
-			//	trackHitTree.AddMember(LayerID,TruthHitKey, alloc);
-			LayerHere = LayerHere + 1;
 
 
-			IndexVec.clear();
 
-			int KeyIDVecSize = KeyIDVec.size();
 
-			for(int i = 0; i < KeyIDVecSize; i++){
 
 
-				if(static_cast<uint64_t>(g4hit_iter->second) == KeyIDVec[i]) IndexVec.push_back(i);
 
-			}
-			int	HitSize = IndexVec.size();
-			//		cout << "HitSize = " << HitSize << endl;
 
-			for(int i = 0; i < HitSize; i++){
+	//      ptree trackTree;
+	rapidjson::Value trackTree(rapidjson::kObjectType);
+	trackTree.AddMember("OriginVertexPoint", loadCoordinate(vtx->get_x(),vtx->get_y(),vtx->get_z()), alloc);
+	trackTree.AddMember("TrackSequenceInEvent", g4particle->get_track_id(), alloc);
+	trackTree.AddMember("HitInTruthTrack", trackHitTree, alloc);
+	trackTree.AddMember("TrackID", trkid, alloc);		
+	trackTree.AddMember("MVTXHitID", MVTXHitIDTree, alloc);
+	trackTree.AddMember("INTTHitID", INTTHitIDTree, alloc);
 
-				int IndexID = IndexVec[i];
+	trackTree.AddMember("ParentPDGID", ParentPDGID, alloc);
+	trackTree.AddMember("ParentTrkID", ParentTrkID, alloc);
 
-				MVTXHitIDTree2.PushBack(HitIDVec[IndexID],alloc);
 
+	trackTree.AddMember("ParticleTypeID", g4particle->get_pid(), alloc);
+	trackTree.AddMember("TrackMomentum",
+			loadCoordinate(g4particle->get_px(),
+				g4particle->get_py(),
+				g4particle->get_pz()),
+			alloc);
+	trackTree.AddMember("TrackEnergy",g4particle->get_e() , alloc);
 
-			}
+	//      trackTree.put("TrackDCA3DXY", track->get_dca3d_xy());
+	//      trackTree.put("TrackDCA3DZ", track->get_dca3d_z());
 
+	//      trackTree.add_child("TruthHit", trackHitTree);
 
+	//      truthTracksTree.add_child("TruthTrack", trackTree);
+	truthTracksTree.PushBack(trackTree, alloc);
 
-
-
-		}  //   for (auto& clus_key : clus_keys)
-
-
-
-
-
-		MVTXHitIDTree.PushBack(MVTXHitIDTree2, alloc);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		//INTT
-		//		cout << "Pass 6.6" << endl;
-
-
-		rapidjson::Value INTTHitIDTree(rapidjson::kArrayType);
-		rapidjson::Value INTTHitIDTree2(rapidjson::kArrayType);
-
-		//		cout << "Pass 6.7" << endl;
-
-		auto g4hits_iter_intt = m_track_g4hits_map_intt.equal_range(g4particle->get_track_id());
-
-
-
-
-
-
-
-
-
-		LayerHere = 3;
-
-		for (auto& g4hit_iter = g4hits_iter_intt.first;
-				g4hit_iter != g4hits_iter_intt.second; ++g4hit_iter)
-		{
-			//          ptree hitIDTree;
-			//          hitIDTree.put("", g4hit_key);
-			//	int Info[2];
-			//	HitInFoVec.first = LayerHere;
-			//	HitInFoVec.second =  static_cast<uint64_t>(g4hit_iter->second);
-
-
-
-
-			//	cout << "HitInfo[trkid].size() = " << HitInfo[trkid].size() << endl;
-
-			rapidjson::Value trackHitTree2(rapidjson::kArrayType);
-
-			trackHitTree2.PushBack(LayerHere, alloc);
-			trackHitTree2.PushBack(static_cast<uint64_t>(g4hit_iter->second), alloc);
-
-			trackHitTree.PushBack(trackHitTree2, alloc);
-
-			//    rapidjson::Value LayerID(LayerHere, alloc);
-			//    rapidjson::Value TruthHitKey(static_cast<uint64_t>(g4hit_iter->second), alloc);
-			//	trackHitTree.AddMember(LayerID,TruthHitKey, alloc);
-			LayerHere = LayerHere + 1;
-
-
-			IndexVecINTT.clear();
-
-
-
-
-			//	cout << "Pass 6.10" << endl;
-
-
-			int KeyIDVecSize_intt = KeyIDVecINTT.size();
-
-
-
-
-
-
-			//	cout << "Pass 6.11" << endl;
-
-			for(int i = 0; i < KeyIDVecSize_intt; i++){
-
-
-				if(static_cast<uint64_t>(g4hit_iter->second) == KeyIDVecINTT[i]) IndexVecINTT.push_back(i);
-
-			}
-
-			//	cout << "Pass 6.12" << endl;
-
-			int	HitSize_intt = IndexVecINTT.size();
-
-			//		cout << "HitSize_intt = " << HitSize_intt << endl;
-
-			for(int i = 0; i < HitSize_intt; i++){
-
-				int IndexID = IndexVecINTT[i];
-
-
-				INTTHitIDTree2.PushBack(HitIDVecINTT[IndexID],alloc);
-
-			}
-
-
-
-
-
-		}  //   for (auto& clus_key : clus_keys)
-
-
-
-
-
-		INTTHitIDTree.PushBack(INTTHitIDTree2, alloc);
-
-
-
-
-
-
-
-
-
-
-
-
-		//      ptree trackTree;
-		rapidjson::Value trackTree(rapidjson::kObjectType);
-		trackTree.AddMember("OriginVertexPoint", loadCoordinate(vtx->get_x(),vtx->get_y(),vtx->get_z()), alloc);
-		trackTree.AddMember("TrackSequenceInEvent", g4particle->get_track_id(), alloc);
-		trackTree.AddMember("HitInTruthTrack", trackHitTree, alloc);
-		trackTree.AddMember("TrackID", trkid, alloc);		
-		trackTree.AddMember("MVTXHitID", MVTXHitIDTree, alloc);
-		trackTree.AddMember("INTTHitID", INTTHitIDTree, alloc);
-
-		trackTree.AddMember("ParticleTypeID", g4particle->get_pid(), alloc);
-		trackTree.AddMember("TrackMomentum",
-				loadCoordinate(g4particle->get_px(),
-					g4particle->get_py(),
-					g4particle->get_pz()),
-				alloc);
-		trackTree.AddMember("TrackEnergy",g4particle->get_e() , alloc);
-
-		//      trackTree.put("TrackDCA3DXY", track->get_dca3d_xy());
-		//      trackTree.put("TrackDCA3DZ", track->get_dca3d_z());
-
-		//      trackTree.add_child("TruthHit", trackHitTree);
-
-		//      truthTracksTree.add_child("TruthTrack", trackTree);
-		truthTracksTree.PushBack(trackTree, alloc);
-
+//      cout << "Pass 6.14" << endl;
 
 
 		//cout << "g4particle->get_pid() = " << g4particle->get_pid() << "   g4particle->get_Z() = " << g4particle->get_Z()  << endl;
@@ -1235,10 +1309,10 @@ int HFMLTriggerInterface::process_event(PHCompositeNode* topNode)
 		m_jsonOut << "," << endl;
 	}
 
-	//  write_json(m_jsonOut, pTree);
-	//  write_xml(m_jsonOut, jsonTree);
+//  write_json(m_jsonOut, pTree);
+//  write_xml(m_jsonOut, jsonTree);
 
-	//  d.AddMember("Test", 1, d.GetAllocator());
+//  d.AddMember("Test", 1, d.GetAllocator());
 
 	rapidjson::OStreamWrapper osw(m_jsonOut);
 	rapidjson::PrettyWriter<rapidjson::OStreamWrapper> writer(osw);
@@ -1280,13 +1354,14 @@ int HFMLTriggerInterface::End(PHCompositeNode* topNode)
 
 int HFMLTriggerInterface::load_nodes(PHCompositeNode* topNode)
 {
-
+    cout << "Loading Nodes Bro" << endl;
 	m_hitsets = findNode::getClass<TrkrHitSetContainer>(topNode, "TRKR_HITSET");
 	if (!m_hitsets)
 	{
 		std::cout << PHWHERE << "ERROR: Can't find node TRKR_HITSET" << std::endl;
 		return Fun4AllReturnCodes::ABORTEVENT;
 	}
+    cout << "Loading Nodes Bro - Pass 1" << endl;
 
 	m_hit_truth_map = findNode::getClass<TrkrHitTruthAssoc>(topNode, "TRKR_HITTRUTHASSOC");
 	if (!m_hit_truth_map)
@@ -1294,36 +1369,41 @@ int HFMLTriggerInterface::load_nodes(PHCompositeNode* topNode)
 		std::cout << PHWHERE << " unable to find DST node TRKR_HITTRUTHASSOC" << std::endl;
 		return Fun4AllReturnCodes::ABORTEVENT;
 	}
+    cout << "Loading Nodes Bro - Pass 2" << endl;
 
 	//m_cluster_hit_map = findNode::getClass<TrkrClusterHitAssoc>(topNode, "TRKR_CLUSTERHITASSOC");
 	//if (!m_cluster_hit_map)
 	//{
-	//  std::cout << PHWHERE << " unable to find DST node TRKR_CLUSTERHITASSOC" << std::endl;
+	//  //std::cout << PHWHERE << " unable to find DST node TRKR_CLUSTERHITASSOC" << std::endl;
 	//  return Fun4AllReturnCodes::ABORTEVENT;
 	//}
 
 	m_g4hits_mvtx = findNode::getClass<PHG4HitContainer>(topNode, "G4HIT_MVTX");
 	if (!m_g4hits_mvtx)
 	{
-		std::cout << PHWHERE << " unable to find DST node G4HIT_MVTX" << std::endl;
+		//std::cout << PHWHERE << " unable to find DST node G4HIT_MVTX" << std::endl;
 		return Fun4AllReturnCodes::ABORTEVENT;
 	}
 
+    cout << "Loading Nodes Bro - Pass 3" << endl;
 
 	m_g4hits_intt = findNode::getClass<PHG4HitContainer>(topNode, "G4HIT_INTT");
 	if (!m_g4hits_intt)
 	{
-		std::cout << PHWHERE << " unable to find DST node G4HIT_INTT" << std::endl;
+		//std::cout << PHWHERE << " unable to find DST node G4HIT_INTT" << std::endl;
 		return Fun4AllReturnCodes::ABORTEVENT;
 	}
 
-
+    cout << "Loading Nodes Bro - Pass 4" << endl;
+/*
 	m_GenEventMap = findNode::getClass<PHHepMCGenEventMap>(topNode, "PHHepMCGenEventMap");
 	if (!m_GenEventMap)
 	{
-		std::cout << PHWHERE << " - Fatal error - missing node PHHepMCGenEventMap" << std::endl;
+		//std::cout << PHWHERE << " - Fatal error - missing node PHHepMCGenEventMap" << std::endl;
 		return Fun4AllReturnCodes::ABORTEVENT;
 	}
+*/	
+	cout << "Pass All Brio" << endl;
 
 	return Fun4AllReturnCodes::EVENT_OK;
 }

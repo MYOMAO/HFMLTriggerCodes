@@ -11,12 +11,12 @@ AM_CPPFLAGS = \
   -I$(OFFLINE_MAIN)/include \
   -I$(OFFLINE_MAIN)/include/eigen3 \
   -I$(ROOTSYS)/include \
-  -I/opt/sphenix/core/rapidjson/include
+  -I/cvmfs/sphenix.sdcc.bnl.gov/gcc-8.3/opt/sphenix/core/rapidjson/include/
 
 AM_LDFLAGS = \
   -L$(libdir) \
 	-L$(ROOTSYS)/lib \
-	-L$(OFFLINE_MAIN)/lib
+	-L$(OFFLINE_MAIN)/lib 
 
 pkginclude_HEADERS = \
   HFMLTriggerOccupancy.h \

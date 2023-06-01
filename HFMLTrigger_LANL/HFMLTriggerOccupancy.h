@@ -8,6 +8,7 @@
 #include <fstream>  // std::fstream
 #include <string>
 #include <vector>
+#include <trackbase/ActsGeometry.h>
 
 class TTree;
 class TFile;
@@ -118,6 +119,7 @@ class HFMLTriggerOccupancy : public SubsysReco
   TH1F *m_Multiplicity;
   TH2F *m_LayerMultiplicity;
   TH3F *m_LayerChipMultiplicity;
+  ActsGeometry * m_tGeometry;
 
 };
 

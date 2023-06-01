@@ -28,10 +28,13 @@
 #include <trackbase/TrkrHitv1.h>
 
 #include <mvtx/CylinderGeom_Mvtx.h>
-#include <mvtx/MvtxDefs.h>
+#include <trackbase/MvtxDefs.h>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #include <HepMC/GenEvent.h>
 #include <HepMC/GenVertex.h>
+#pragma GCC diagnostic pop
 #include <phhepmc/PHHepMCGenEvent.h>
 #include <phhepmc/PHHepMCGenEventMap.h>
 
@@ -179,6 +182,17 @@ int HFMLTriggerOccupancy::InitRun(PHCompositeNode* topNode)
     cout << "HFMLTriggerOccupancy::InitRun - WARNING - missing HFMLTrigger_HepMCTriggerFlags" << endl;
   }
 
+
+	
+  m_tGeometry = findNode::getClass<ActsGeometry>(topNode, "ActsGeometry");
+	
+  if (!m_tGeometry)
+	{
+		cout << "HFMLTriggerInterface::InitRun - WARNING - missing m_tGeometry" << endl;
+	}
+
+
+
   return Fun4AllReturnCodes::EVENT_OK;
 }
 
@@ -280,6 +294,7 @@ int HFMLTriggerOccupancy::process_event(PHCompositeNode* topNode)
     CylinderGeom_Mvtx* geom = dynamic_cast<CylinderGeom_Mvtx*>(m_Geoms->GetLayerGeom(layer));
     assert(geom);
 
+
     const int n_stave = geom->get_N_staves();
 
     assert(multiplicity_vec[layer].empty());
@@ -321,11 +336,25 @@ int HFMLTriggerOccupancy::process_event(PHCompositeNode* topNode)
         unsigned int chip = MvtxDefs::getChipId(hitSetKey);
         unsigned int stave = MvtxDefs::getStaveId(hitSetKey);
         TVector3 local_coords = geom->get_local_coords_from_pixel(pixel_x, pixel_z);
-        TVector3 world_coords = geom->get_world_from_local_coords(stave,
+/*	
+		TVector3 world_coords = geom->get_world_from_local_coords(stave,
                                                                   0,
                                                                   0,
                                                                   chip,
                                                                   local_coords);
+*/
+
+				
+		auto surface = m_tGeometry->maps().getSiliconSurface(hitSetKey);
+				/*				
+								TVector3 world_coords = geom->get_world_from_local_coords(stave,
+										0,
+										0,
+										chip,
+										local_coords);
+				*/
+
+		TVector3 world_coords = geom->get_world_from_local_coords(surface, m_tGeometry ,local_coords);
 
         //unsigned int pixel_x(cell->get_pixel_index() % geom->get_NX());
         //unsigned int pixel_z(cell->get_pixel_index() / geom->get_NX());

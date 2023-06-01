@@ -9,6 +9,10 @@
 #include <string>
 #include <vector>
 
+#include <g4main/PHG4Particle.h>
+#include <g4main/PHG4TruthInfoContainer.h>
+#include <g4main/PHG4VtxPoint.h>
+
 class TTree;
 class TFile;
 class TH1D;
@@ -96,9 +100,10 @@ class HFMLTriggerHepMCTrigger : public SubsysReco
   //! Usually, ID = 0 means the primary Au+Au collision background
   int _embedding_id;
 
-  PHHepMCGenEventMap *m_Geneventmap;
+//  PHHepMCGenEventMap *m_Geneventmap;
   PdbParameterMap *m_Flags;
 
+  PHG4TruthInfoContainer * m_truth_info;
   TH1D *m_hNorm;
   TH2F *m_DRapidity;
 };

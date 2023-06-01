@@ -34,9 +34,12 @@
 
 #include <g4eval/SvtxEvalStack.h>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #include <HepMC/GenEvent.h>
-#include <HepMC/GenRanges.h>
 #include <HepMC/GenVertex.h>
+#pragma GCC diagnostic pop
+#include <HepMC/GenRanges.h>
 #include <ffaobjects/FlagSavev1.h>
 #include <phhepmc/PHHepMCGenEvent.h>
 #include <phhepmc/PHHepMCGenEventMap.h>
@@ -62,9 +65,15 @@
 #include <cstddef>
 #include <iostream>
 
+#include <map>
+
+
 
 
 using namespace std;
+
+
+std::multimap<std::vector<int>, int> decaymap;
 
 HFMLTriggerHepMCTrigger::HFMLTriggerHepMCTrigger(const std::string& moduleName,
 		const std::string& filename
@@ -76,7 +85,6 @@ HFMLTriggerHepMCTrigger::HFMLTriggerHepMCTrigger(const std::string& moduleName,
 	, _eta_min(-1)
 	, _eta_max(1)
 	, _embedding_id(1)
-	, m_Geneventmap(nullptr)
 	, m_Flags(nullptr)
 	, m_hNorm(nullptr)
 	  , m_DRapidity(nullptr)
@@ -115,12 +123,16 @@ int HFMLTriggerHepMCTrigger::Init(PHCompositeNode* topNode)
 
 int HFMLTriggerHepMCTrigger::InitRun(PHCompositeNode* topNode)
 {
-	m_Geneventmap = findNode::getClass<PHHepMCGenEventMap>(topNode, "PHHepMCGenEventMap");
-	if (!m_Geneventmap)
+
+	std::cout << "HFMLTriggerHepMCTrigger - Called?" << std::endl;
+
+	m_truth_info = findNode::getClass<PHG4TruthInfoContainer>(topNode, "G4TruthInfo");
+	if (!m_truth_info)
 	{
-		std::cout << PHWHERE << " - Fatal error - missing node PHHepMCGenEventMap" << std::endl;
+		std::cout << PHWHERE << " - Fatal error - missing node G4TruthInfo" << std::endl;
 		return Fun4AllReturnCodes::ABORTRUN;
 	}
+
 
 	PHNodeIterator iter(topNode);
 
@@ -140,44 +152,28 @@ int HFMLTriggerHepMCTrigger::InitRun(PHCompositeNode* topNode)
 		dstNode->addNode(new PHDataNode<PHObject>(m_Flags, "HFMLTrigger_HepMCTriggerFlags", "PHObject"));
 	}
 
+	decaymap.insert({{-321, 211}, 0});
+	decaymap.insert({{-211,321}, 1});
+
+
+
 	return Fun4AllReturnCodes::EVENT_OK;
 }
 
-int HFMLTriggerHepMCTrigger::process_event(PHCompositeNode* topNode)
+int HFMLTriggerHepMCTrigger::process_event(PHCompositeNode* topNode)   //Now it becomes HFMLG4TruthInfoTrigger :)
 {
-	assert(m_Geneventmap);
 
-	PHHepMCGenEvent* genevt = m_Geneventmap->get(_embedding_id);
-	if (!genevt)
-	{
-		std::cout << PHWHERE << " - Fatal error - node PHHepMCGenEventMap missing subevent with embedding ID " << _embedding_id;
-		std::cout << ". Print PHHepMCGenEventMap:";
-		m_Geneventmap->identify();
-		return Fun4AllReturnCodes::ABORTRUN;
-	}
+	std::cout << "HFMLTriggerHepMCTrigger - Processed Bro?" << std::endl;
+	
+	assert(m_truth_info);
 
-	HepMC::GenEvent* theEvent = genevt->getEvent();
-	assert(theEvent);
-	if (Verbosity() >= VERBOSITY_MORE)
-	{
-		cout << "HFMLTriggerHepMCTrigger::process_event - process HepMC::GenEvent with signal_process_id = "
-			<< theEvent->signal_process_id();
-		if (theEvent->signal_process_vertex())
-		{
-			cout << " and signal_process_vertex : ";
-			theEvent->signal_process_vertex()->print();
-		}
-		cout << "  - Event record:" << endl;
-		theEvent->print();
-	}
+	m_truth_info = findNode::getClass<PHG4TruthInfoContainer>(topNode, "G4TruthInfo");
+	
 
-	TDatabasePDG* pdg = TDatabasePDG::Instance();
-
-	int targetPID = std::abs(pdg->GetParticle("D0")->PdgCode());
-	int daughter1PID = std::abs(pdg->GetParticle("pi+")->PdgCode());
-	int daughter2PID = std::abs(pdg->GetParticle("K+")->PdgCode());
 
 	bool acceptEvent = false;
+	int ParentPDGID = -1;
+	int PDGID = -1;
 
 	assert(m_hNorm);
 	m_hNorm->Fill("Event", 1);
@@ -185,100 +181,156 @@ int HFMLTriggerHepMCTrigger::process_event(PHCompositeNode* topNode)
 	unsigned int nD0(0);
 	unsigned int nD0PiK(0);
 
-	auto range = theEvent->particle_range();
-	for (HepMC::GenEvent::particle_const_iterator piter = range.begin(); piter != range.end(); ++piter)
+	std::vector<int> ParentTrkInfo;
+    std::vector<std::vector<int>> DaughterInfo;
+    std::vector<std::vector<float>> DaughterRapInfo;
+	
+
+	std::cout << "Pass 1" << std::endl;
+
+	PHG4TruthInfoContainer::ConstRange range = m_truth_info->GetParticleRange();
+	for (PHG4TruthInfoContainer::ConstIterator iter = range.first;
+			iter != range.second; ++iter)
 	{
-		const HepMC::GenParticle* p = *piter;
-		assert(p);
 
-		float particlepx = p->momentum().x();
-		float particlepy = p->momentum().y();
+//		float ParentE = 0;
+//		float ParentPx = 0;
+//		float ParentPy = 0;
+//		float ParentPz = 0;
+		//float ParenrtPt = 0;
+		int ParentTrkId = 0;
 
-		float ParPt = sqrt(particlepx * particlepx + particlepy * particlepy);
+		float E;
+//		float Px;
+//		float Py;
+		float Pz;
+//		float Pt;
 
-		if (std::abs(p->pdg_id()) == targetPID && ParPt > -1)
+		double rapidity;
+
+
+		PHG4Particle *g4particle = iter->second;
+		PHG4Particle *mother = nullptr;
+
+		PDGID = g4particle->get_pid();
+		E = g4particle->get_e();
+		//Px = g4particle->get_px();
+		//Py = g4particle->get_py();
+		Pz = g4particle->get_pz();
+
+		rapidity = 0.5 * TMath::Log((E+Pz)/(E-Pz));
+//		cout << "E = " << E << "   pz = " << Pz << "   rapidity = " << rapidity << endl;
+
+		if (g4particle->get_parent_id() == 0)
 		{
-			if (Verbosity())
+			ParentPDGID = 0;
+		}
+		else
+		{
+			mother = m_truth_info->GetParticle(g4particle->get_parent_id());
+			ParentPDGID = mother->get_pid();
+
+	//		ParentE = mother->get_e();
+	//		ParentPx = mother->get_px();
+	//		ParentPy = mother->get_py();
+	//		ParentPz = mother->get_pz();
+			ParentTrkId = mother->get_track_id();
+
+		}
+
+		//ParentPt = sqrt(ParentPx * ParentPx + ParentPy * ParentPy);
+
+		int VtxSize = ParentTrkInfo.size();
+		bool NewVtx = true;
+		int Index = -1;
+
+		for (int i = 0; i < VtxSize; i++)
+		{
+			if (ParentTrkId != 0 && ParentTrkId == ParentTrkInfo[i])
 			{
-				cout << "HFMLTriggerHepMCTrigger::process_event - Accept signal particle : ";
-				p->print();
-				cout << endl;
+				NewVtx = false;
+				Index = i;
+			}
+		}
+
+		bool VtxToQA = false;
+		if (abs(ParentPDGID) == 421) VtxToQA = true;
+
+//		cout << "PDGID = " << PDGID << "   ParentPDGID = " << ParentPDGID << "   rapidity = " << rapidity << endl;
+
+		if ((ParentTrkId > 0 || abs(PDGID) == abs(ParentPDGID)) && VtxToQA == true){
+			if(PDGID == 22){
+				std::cout << "Extra Radiated Photons, Not count them" << std::endl;
+				continue;
+			}
+			if (NewVtx)
+			{
+				ParentTrkInfo.push_back(ParentTrkId);
+				std::vector<int> Daughters;
+				Daughters.push_back(PDGID);
+				DaughterInfo.push_back(Daughters);
+				
+
+						
+				std::vector<float> DaughtersRap;
+				DaughtersRap.push_back(rapidity);
+				DaughterRapInfo.push_back(DaughtersRap);
+
+
+				nD0 = nD0 + 1;
+
+			}
+			if (!NewVtx)
+			{
+
+				DaughterInfo[Index].push_back(PDGID);
+				DaughterRapInfo[Index].push_back(rapidity);
+
 			}
 
-			m_hNorm->Fill("D0", 1);
-			++nD0;
+		}
 
-			assert(m_DRapidity);
-			const double rapidity = 0.5 * log((p->momentum().e() + p->momentum().z()) /
-					(p->momentum().e() - p->momentum().z()));
 
-			m_DRapidity->Fill(rapidity, 0);
+	}
 
-			const HepMC::GenVertex* decayVertex = p->end_vertex();
 
-			int hasDecay1(0);
-			int hasDecay2(0);
-			int hasDecayOther(0);
 
-			if (decayVertex)
-			{
-				for (auto diter = decayVertex->particles_out_const_begin();
-						diter != decayVertex->particles_out_const_end();
-						++diter)
+	
+    int VtxSizeFinal = DaughterInfo.size();
 
-				{
-					const HepMC::GenParticle* pd = *diter;
-					assert(pd);
 
-					if (Verbosity())
-					{
-						cout << "HFMLTriggerHepMCTrigger::process_event - Testing daughter particle: ";
-						pd->print();
-						cout << endl;
-					}
 
-					if (std::abs(pd->pdg_id()) == daughter1PID)
-					{
-						const double eta = pd->momentum().eta();
+	for (int q = 0; q < VtxSizeFinal; q++){
 
-						if (eta > _eta_min and eta < _eta_max)
-							++hasDecay1;
-					}
-					else if (std::abs(pd->pdg_id()) == daughter2PID)
-					{
-						const double eta = pd->momentum().eta();
+		sort(DaughterInfo[q].begin(), DaughterInfo[q].end());
+		bool RapAcc = true;
+		int DaughterSize = DaughterInfo[q].size();
 
-						if (eta > _eta_min and eta < _eta_max)
-							++hasDecay2;
-					}
-					else
-						++hasDecayOther;
-				}
 
-				if (hasDecay1 == 1 and hasDecay2 == 1 and hasDecayOther == 0)
-				{
-					m_hNorm->Fill("D0->PiK", 1);
-					++nD0PiK;
 
-					acceptEvent = true;
+		for(int s = 0; s < DaughterSize; s++){
 
-					m_DRapidity->Fill(rapidity, 1);
-				}
+			if(abs(DaughterRapInfo[q][s]) > 1) RapAcc = false;
+			cout << "PDGID =  " << DaughterInfo[q][s] <<  "   rapidity = " << DaughterRapInfo[q][s]  << endl;
+		}
 
-			}  //      if (decayVertex)
-			else
-			{
-				cout << "HFMLTriggerHepMCTrigger::process_event - Warning - target particle did not have decay vertex : ";
-				p->print();
-				cout << endl;
-			}
+		int key = -1;
+	    if (decaymap.find({DaughterInfo[q]}) != decaymap.end()) key = decaymap.find({DaughterInfo[q]})->second;
+		cout << "key = " << key << "   RapAcc = " << RapAcc << endl;
+		RapAcc = true;
+		if(key > -1 && RapAcc == true){
+			m_hNorm->Fill("D0->PiK", 1);
+			++nD0PiK;
+			//m_DRapidity->Fill(rapidity, 1);
+			acceptEvent = true;			
+		}
 
-		}  //    if (std::abs(p-> pdg_id()) == targetPID)
-	}    //  for (HepMC::GenEvent::particle_const_iterator piter = range.begin(); piter != range.end(); ++piter)
-
+	}
+	
+	
 	if (nD0 >= 2)
 	{
-		cout <<"HFMLTriggerHepMCTrigger::process_event - D0-Pair with nD0 = "<<nD0<<endl;
+		cout <<"HFMLTriggerHepMCTrigger::process_event - D0-Pair with nD0 = "<<nD0  << "   Is that fuckin accepted?  " << acceptEvent <<endl;
 		m_hNorm->Fill("D0-Pair", nD0 * (nD0 - 1) / 2);
 	}
 	if (nD0PiK >= 2)
@@ -286,26 +338,9 @@ int HFMLTriggerHepMCTrigger::process_event(PHCompositeNode* topNode)
 		m_hNorm->Fill("D0->PiK-Pair", nD0PiK * (nD0PiK - 1) / 2);
 	}
 
-	++_ievent;
 
-	if (Verbosity())
-	{
-		cout << "HFMLTriggerHepMCTrigger::process_event - acceptEvent = " << acceptEvent;
-		cout << endl;
 
-		if (acceptEvent)
-		{
-			cout << "HFMLTriggerHepMCTrigger::process_event - processed HepMC::GenEvent with signal_process_id = "
-				<< theEvent->signal_process_id();
-			if (theEvent->signal_process_vertex())
-			{
-				cout << " and signal_process_vertex : ";
-				theEvent->signal_process_vertex()->print();
-			}
-			cout << "  - Event record:" << endl;
-			theEvent->print();
-		}
-	}
+
 
 	assert(m_Flags);
 	m_Flags->set_int_param(Name(), acceptEvent);

@@ -77,7 +77,8 @@ std::multimap<std::vector<int>, int> decaymap;
 
 HFMLTriggerHepMCTrigger::HFMLTriggerHepMCTrigger(const std::string& moduleName,
 		const std::string& filename
-		, bool IsSignal)
+		, bool IsSignal
+		, bool IsbbBar)
 	: SubsysReco(moduleName)
 	, _ievent(0)
 	, m_RejectReturnCode(Fun4AllReturnCodes::ABORTEVENT)
@@ -91,20 +92,26 @@ HFMLTriggerHepMCTrigger::HFMLTriggerHepMCTrigger(const std::string& moduleName,
 {
 	_foutname = filename;
 	SignalSim = IsSignal;
+	DobbBar = IsbbBar;
+	
 }
 
 int HFMLTriggerHepMCTrigger::Init(PHCompositeNode* topNode)
 {
 	_ievent = 0;
 
-	cout << "INSIDE SUCK:: SignalSim = " << SignalSim  << endl;
+	cout << "INSIDE:: SignalSim = " << SignalSim << "   DobbBar = " << DobbBar << endl;
 
 
+	cout << "Name: - "  << (_foutname + string(".root")).c_str() << endl;
 	_f = new TFile((_foutname + string(".root")).c_str(), "RECREATE");
+
 
 	m_hNorm = new TH1D("hNormalization",  //
 			"Normalization;Items;Summed quantity", 10, .5, 10.5);
 	int i = 1;
+
+	
 	m_hNorm->GetXaxis()->SetBinLabel(i++, "IntegratedLumi");
 	m_hNorm->GetXaxis()->SetBinLabel(i++, "Event");
 	m_hNorm->GetXaxis()->SetBinLabel(i++, "D0");
@@ -112,6 +119,9 @@ int HFMLTriggerHepMCTrigger::Init(PHCompositeNode* topNode)
 	m_hNorm->GetXaxis()->SetBinLabel(i++, "D0-Pair");
 	m_hNorm->GetXaxis()->SetBinLabel(i++, "D0->PiK-Pair");
 	m_hNorm->GetXaxis()->SetBinLabel(i++, "Accepted");
+
+
+	
 
 	m_hNorm->GetXaxis()->LabelsOption("v");
 
@@ -163,7 +173,7 @@ int HFMLTriggerHepMCTrigger::InitRun(PHCompositeNode* topNode)
 int HFMLTriggerHepMCTrigger::process_event(PHCompositeNode* topNode)   //Now it becomes HFMLG4TruthInfoTrigger :)
 {
 
-	std::cout << "HFMLTriggerHepMCTrigger - Processed Bro?" << std::endl;
+	std::cout << "HFMLTriggerHepMCTrigger - Processed Bro? - YES I AM SURE ZZ" << std::endl;
 	
 	assert(m_truth_info);
 
@@ -186,7 +196,7 @@ int HFMLTriggerHepMCTrigger::process_event(PHCompositeNode* topNode)   //Now it 
     std::vector<std::vector<float>> DaughterRapInfo;
 	
 
-	std::cout << "Pass 1" << std::endl;
+//	std::cout << "Pass 1" << std::endl;
 
 	PHG4TruthInfoContainer::ConstRange range = m_truth_info->GetParticleRange();
 	for (PHG4TruthInfoContainer::ConstIterator iter = range.first;
@@ -256,6 +266,9 @@ int HFMLTriggerHepMCTrigger::process_event(PHCompositeNode* topNode)   //Now it 
 		bool VtxToQA = false;
 		if (abs(ParentPDGID) == 421) VtxToQA = true;
 
+//		cout << "ParentPDGID = " << ParentPDGID << endl;
+
+		if(DobbBar) VtxToQA = true;
 //		cout << "PDGID = " << PDGID << "   ParentPDGID = " << ParentPDGID << "   rapidity = " << rapidity << endl;
 
 		if ((ParentTrkId > 0 || abs(PDGID) == abs(ParentPDGID)) && VtxToQA == true){
@@ -263,6 +276,9 @@ int HFMLTriggerHepMCTrigger::process_event(PHCompositeNode* topNode)   //Now it 
 				std::cout << "Extra Radiated Photons, Not count them" << std::endl;
 				continue;
 			}
+
+			std::cout << "PDGID = " << PDGID << std::endl;
+
 			if (NewVtx)
 			{
 				ParentTrkInfo.push_back(ParentTrkId);
@@ -311,13 +327,13 @@ int HFMLTriggerHepMCTrigger::process_event(PHCompositeNode* topNode)   //Now it 
 		for(int s = 0; s < DaughterSize; s++){
 
 			if(abs(DaughterRapInfo[q][s]) > 1) RapAcc = false;
-			cout << "PDGID =  " << DaughterInfo[q][s] <<  "   rapidity = " << DaughterRapInfo[q][s]  << endl;
+	//		cout << "PDGID =  " << DaughterInfo[q][s] <<  "   rapidity = " << DaughterRapInfo[q][s]  << endl;
 		}
 
 		int key = -1;
 	    if (decaymap.find({DaughterInfo[q]}) != decaymap.end()) key = decaymap.find({DaughterInfo[q]})->second;
-		cout << "key = " << key << "   RapAcc = " << RapAcc << endl;
-		RapAcc = true;
+//		cout << "key = " << key << "   RapAcc = " << RapAcc << endl;
+		RapAcc = true; // No rapidity cut for now
 		if(key > -1 && RapAcc == true){
 			m_hNorm->Fill("D0->PiK", 1);
 			++nD0PiK;
@@ -330,7 +346,7 @@ int HFMLTriggerHepMCTrigger::process_event(PHCompositeNode* topNode)   //Now it 
 	
 	if (nD0 >= 2)
 	{
-		cout <<"HFMLTriggerHepMCTrigger::process_event - D0-Pair with nD0 = "<<nD0  << "   Is that fuckin accepted?  " << acceptEvent <<endl;
+
 		m_hNorm->Fill("D0-Pair", nD0 * (nD0 - 1) / 2);
 	}
 	if (nD0PiK >= 2)
@@ -361,7 +377,7 @@ int HFMLTriggerHepMCTrigger::process_event(PHCompositeNode* topNode)   //Now it 
 
 
 
-	if(!SignalSim){
+	if(!SignalSim || DobbBar){
 		return Fun4AllReturnCodes::EVENT_OK;
 
 	}

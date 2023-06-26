@@ -55,6 +55,8 @@ PHPythia8::PHPythia8(const std::string &name)
   , m_IntegralNode(nullptr)
 {
   char *charPath = getenv("PYTHIA8");
+  cout << "ZZ ROCK PYTHIA 8 - YAY BRO!!!" << endl;
+  
   if (!charPath)
   {
     cout << "PHPythia8::Could not find $PYTHIA8 path!" << endl;

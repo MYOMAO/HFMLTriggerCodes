@@ -119,16 +119,14 @@ class MakeActsGeometry : public SubsysReco
   }
 
 
-  void misalignmentFactor(TrkrDefs::TrkrId id, const double misalignment)
+  void misalignmentFactor(uint8_t layer, const double misalignment)
   {
-    auto it = m_misalignmentFactor.find(id);
+    auto it = m_misalignmentFactor.find(layer);
     if(it != m_misalignmentFactor.end())
       {
 	it->second = misalignment;
 	return;
       }
-
-    std::cout << "Passed an unknown trkr id, misalignment factor will not be set for " << id << std::endl;
   }
 
   double getSurfStepPhi() {return m_surfStepPhi;}
@@ -136,9 +134,6 @@ class MakeActsGeometry : public SubsysReco
 
   void set_drift_velocity(double vd){m_drift_velocity = vd;}
 
-  void build_mm_surfaces( bool value )
-  { m_buildMMs = value; }
-    
   void set_nSurfPhi( unsigned int value )
   { m_nSurfPhi = value; }
   
@@ -212,7 +207,7 @@ class MakeActsGeometry : public SubsysReco
   TGeoManager* m_geoManager = nullptr;
 
   bool m_useField = true;
-  std::map<TrkrDefs::TrkrId, double> m_misalignmentFactor;
+  std::map<uint8_t, double> m_misalignmentFactor;
 
   /// Several maps that connect Acts world to sPHENIX G4 world 
   std::map<TrkrDefs::hitsetkey, TGeoNode*> m_clusterNodeMap;
@@ -271,8 +266,6 @@ class MakeActsGeometry : public SubsysReco
   /// Magnetic field components to set Acts magnetic field
   std::string m_magField ="1.4" ;
   double m_magFieldRescale = -1.;
-
-  bool m_buildMMs = false;
 
   double m_mvtxDevs[6] = {0};
   double m_inttDevs[6] = {0};

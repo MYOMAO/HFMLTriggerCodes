@@ -11,7 +11,9 @@ echo "-------------- CHANGING SOFTWARE NOW BRO --------------------"
 
 #source /opt/sphenix/core/bin/sphenix_setup.csh -n ana.346
 
-source /opt/sphenix/core/bin/sphenix_setup.csh -n  ana.355
+#source /opt/sphenix/core/bin/sphenix_setup.csh -n  new
+
+source /opt/sphenix/core/bin/sphenix_setup.csh -n ana.362
 
 rm -r install
 
@@ -63,6 +65,17 @@ cd g4decayer/
 make clean
 sh autogen.sh --prefix=$MYINSTALL
 make -j8 install
+
+
+cd ../
+
+cd g4main/
+
+make clean
+sh autogen.sh --prefix=$MYINSTALL
+make -j8 install
+
+
 
 cd ../../../../
 

@@ -31,7 +31,6 @@
 /// \author Zhaozhong Shi; LANL, Los Alamos
 
 #include "EvtGenExtDecayerPhysics.hh"
-#include "G4EvtGenDecayer.hh"
 
 #include <Geant4/G4Decay.hh>
 #include <Geant4/G4ParticleDefinition.hh>
@@ -43,7 +42,10 @@
 #include <Geant4/G4VProcess.hh>  // for G4VProcess
 #include <Geant4/G4Version.hh>
 
-#include <cstddef>   // for size_t
+#include <boost/io/ios_state.hpp>
+
+#include <cstddef>  // for size_t
+#include <fstream>
 #include <iostream>  // for operator<<, endl, basic_o...
 #include <string>    // for operator<<
 
@@ -82,12 +84,56 @@ void EvtGenExtDecayerPhysics::ConstructParticle()
 
 void EvtGenExtDecayerPhysics::ConstructProcess()
 {
+  // EvtGen model initialization changed the behavior of std::cout float print. Recover the default float print format
+  boost::io::ios_all_saver ias_cout(std::cout);
+  boost::io::ios_all_saver ias_cerr(std::cerr);
+
   /// Loop over all particles instantiated and add external decayer
   /// to all decay processes if External decayer is set
 
   // Create Geant4 external decayer
-  G4EvtGenDecayer* extDecayer = new G4EvtGenDecayer();
+  extDecayer = new G4EvtGenDecayer();
   extDecayer->SetVerboseLevel(0);
+  std::cout << 	"Using My Fuckin Decayer" << std::endl;
+  std::cout << 	"Is Input File Empty???? -  Answer:   " <<    DecayFile.empty() << std::endl;
+
+  if (!DecayFile.empty())
+  {
+    std::ifstream f_local(DecayFile);
+
+    if (f_local.good())
+    {
+	  std::cout << 	"DecayFile?" << DecayFile << std::endl;
+      extDecayer->SetDecayTable(DecayFile, false);
+    }
+    else
+    {
+	  std::cout << 	"OK - No Decay" << std::endl;
+	  	
+      const char* CALIBRATIONROOT = getenv("CALIBRATIONROOT");
+      if (!CALIBRATIONROOT)
+      {
+        exit(1);
+      }
+      std::string DecayFileCalibrationRepo = std::string(CALIBRATIONROOT) + "/EvtGen/" + DecayFile;
+
+      std::ifstream f_calib(DecayFileCalibrationRepo);
+
+      if (f_calib.good())
+      {
+ 	    std::cout << "OK I set = " << DecayFileCalibrationRepo << std::endl;  
+        extDecayer->SetDecayTable(DecayFileCalibrationRepo, false);
+      }
+      else
+      {
+        std::cout << __PRETTY_FUNCTION__ << " : Fatal error. Decay file can not be found at "
+                  << DecayFile << " nor at " << DecayFileCalibrationRepo << std::endl;
+
+        exit(1);
+      }
+	  std::cout << "DecayFileCalibrationRepo = " << DecayFileCalibrationRepo << std::endl;
+    }
+  }
 
   aParticleIterator->reset();
   int decayer_used = 0;

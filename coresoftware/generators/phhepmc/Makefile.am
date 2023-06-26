@@ -29,7 +29,7 @@ pkginclude_HEADERS = \
 
 libphhepmc_la_LDFLAGS = \
   ${AM_LDFLAGS} \
-  `root-config --libs`
+  `root-config --libs` 
 
 libphhepmc_la_LIBADD = \
   libphhepmc_io.la \
@@ -83,7 +83,7 @@ libphhepmc_io_la_LDFLAGS = \
 libphhepmc_io_la_LIBADD = \
   -lphool \
   -lHepMC \
-  -lCLHEP
+  -lCLHEP 
 
 BUILT_SOURCES = \
   testexternals.cc

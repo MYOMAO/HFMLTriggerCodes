@@ -270,13 +270,13 @@ distuninstallcheck_listfiles = find . -type f -print
 am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \
   | sed 's|^\./|$(prefix)/|' | grep -v '$(infodir)/dir$$'
 distcleancheck_listfiles = find . -type f -print
-ACLOCAL = ${SHELL} /gpfs/mnt/gpfs02/sphenix/user/zshi/FastMLLatest/HFMLTriggerCodes/coresoftware/simulation/g4simulation/g4main/missing aclocal-1.13
+ACLOCAL = ${SHELL} /gpfs/mnt/gpfs02/sphenix/user/zshi/HFMLForChina/HFMLTriggerCodes/coresoftware/simulation/g4simulation/g4main/missing aclocal-1.13
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-AUTOCONF = ${SHELL} /gpfs/mnt/gpfs02/sphenix/user/zshi/FastMLLatest/HFMLTriggerCodes/coresoftware/simulation/g4simulation/g4main/missing autoconf
-AUTOHEADER = ${SHELL} /gpfs/mnt/gpfs02/sphenix/user/zshi/FastMLLatest/HFMLTriggerCodes/coresoftware/simulation/g4simulation/g4main/missing autoheader
-AUTOMAKE = ${SHELL} /gpfs/mnt/gpfs02/sphenix/user/zshi/FastMLLatest/HFMLTriggerCodes/coresoftware/simulation/g4simulation/g4main/missing automake-1.13
+AUTOCONF = ${SHELL} /gpfs/mnt/gpfs02/sphenix/user/zshi/HFMLForChina/HFMLTriggerCodes/coresoftware/simulation/g4simulation/g4main/missing autoconf
+AUTOHEADER = ${SHELL} /gpfs/mnt/gpfs02/sphenix/user/zshi/HFMLForChina/HFMLTriggerCodes/coresoftware/simulation/g4simulation/g4main/missing autoheader
+AUTOMAKE = ${SHELL} /gpfs/mnt/gpfs02/sphenix/user/zshi/HFMLForChina/HFMLTriggerCodes/coresoftware/simulation/g4simulation/g4main/missing automake-1.13
 AWK = gawk
 CC = /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/bin/gcc
 CCDEPMODE = depmode=gcc3
@@ -314,7 +314,7 @@ LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LIPO = 
 LN_S = ln -s
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /gpfs/mnt/gpfs02/sphenix/user/zshi/FastMLLatest/HFMLTriggerCodes/coresoftware/simulation/g4simulation/g4main/missing makeinfo
+MAKEINFO = ${SHELL} /gpfs/mnt/gpfs02/sphenix/user/zshi/HFMLForChina/HFMLTriggerCodes/coresoftware/simulation/g4simulation/g4main/missing makeinfo
 MANIFEST_TOOL = :
 MKDIR_P = /usr/bin/mkdir -p
 NM = /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/binutils/2.37-355ed/x86_64-centos7/bin/nm -B
@@ -337,10 +337,10 @@ SET_MAKE =
 SHELL = /bin/sh
 STRIP = strip
 VERSION = 1.00
-abs_builddir = /gpfs/mnt/gpfs02/sphenix/user/zshi/FastMLLatest/HFMLTriggerCodes/coresoftware/simulation/g4simulation/g4main
-abs_srcdir = /gpfs/mnt/gpfs02/sphenix/user/zshi/FastMLLatest/HFMLTriggerCodes/coresoftware/simulation/g4simulation/g4main
-abs_top_builddir = /gpfs/mnt/gpfs02/sphenix/user/zshi/FastMLLatest/HFMLTriggerCodes/coresoftware/simulation/g4simulation/g4main
-abs_top_srcdir = /gpfs/mnt/gpfs02/sphenix/user/zshi/FastMLLatest/HFMLTriggerCodes/coresoftware/simulation/g4simulation/g4main
+abs_builddir = /gpfs/mnt/gpfs02/sphenix/user/zshi/HFMLForChina/HFMLTriggerCodes/coresoftware/simulation/g4simulation/g4main
+abs_srcdir = /gpfs/mnt/gpfs02/sphenix/user/zshi/HFMLForChina/HFMLTriggerCodes/coresoftware/simulation/g4simulation/g4main
+abs_top_builddir = /gpfs/mnt/gpfs02/sphenix/user/zshi/HFMLForChina/HFMLTriggerCodes/coresoftware/simulation/g4simulation/g4main
+abs_top_srcdir = /gpfs/mnt/gpfs02/sphenix/user/zshi/HFMLForChina/HFMLTriggerCodes/coresoftware/simulation/g4simulation/g4main
 ac_ct_AR = ar
 ac_ct_CC = /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/bin/gcc
 ac_ct_CXX = 
@@ -370,7 +370,7 @@ host_vendor = unknown
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /gpfs/mnt/gpfs02/sphenix/user/zshi/FastMLLatest/HFMLTriggerCodes/coresoftware/simulation/g4simulation/g4main/install-sh
+install_sh = ${SHELL} /gpfs/mnt/gpfs02/sphenix/user/zshi/HFMLForChina/HFMLTriggerCodes/coresoftware/simulation/g4simulation/g4main/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -379,7 +379,7 @@ mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /gpfs/mnt/gpfs02/sphenix/user/zshi/FastMLLatest/HFMLTriggerCodes/install
+prefix = /gpfs/mnt/gpfs02/sphenix/user/zshi/HFMLForChina/HFMLTriggerCodes/install
 program_transform_name = s,x,x,
 psdir = ${docdir}
 sbindir = ${exec_prefix}/sbin
@@ -427,7 +427,6 @@ libg4testbench_la_LDFLAGS = \
 libg4testbench_la_LIBADD = \
   libphg4hit.la \
   -lboost_filesystem \
-  -leASTPhysicsList \
   -leicsmear \
   -lffamodules \
   -lfun4all \

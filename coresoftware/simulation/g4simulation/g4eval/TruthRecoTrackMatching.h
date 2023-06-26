@@ -1,20 +1,24 @@
 #ifndef TRUTHTRKMATCHER__H
 #define TRUTHTRKMATCHER__H
 
+#include "g4evaltools.h" // has some G4Eval tools (TrkrClusterComparer)
+
 #include <fun4all/SubsysReco.h> 
 #include <trackbase/ActsGeometry.h>
 #include <trackbase/TrkrDefs.h>
+#include <trackbase_historic/TrackSeed.h>
 
-#include <TFile.h>
-#include <TTree.h>
+/* #include <TFile.h> */
+/* #include <TTree.h> */
 
 #include <array>
 #include <iostream>
 #include <map>
 #include <set>
-#include <set>
 #include <tuple>
 #include <vector>
+#include <string>
+
 
 class EmbRecoMatchContainer;
 class PHCompositeNode;
@@ -28,6 +32,8 @@ class TrkrCluster;
 class TrkrClusterContainer;
 class TrkrTruthTrack;
 class TrkrTruthTrackContainer;
+class TTree;
+class TFile;
 
 class TruthRecoTrackMatching : public SubsysReco 
 {
@@ -51,14 +57,14 @@ class TruthRecoTrackMatching : public SubsysReco
          *--------------------------------------------------------*/
           const unsigned short _nmin_match = 4    
         , const float  _nmin_ratio         = 0.   
-        , const double _cutoff_dphi        = 0.3  
-        , const double _same_dphi          = 0.05 
-        , const double _cutoff_deta        = 0.3  
-        , const double _same_deta          = 0.05 
-        , const double _cluster_nzwidths   = 0.5
-        , const double _cluster_nphiwidths = 0.5
-        , const unsigned short    _max_nreco_per_truth  = 1
-        , const unsigned short    _max_ntruth_per_reco  = 1
+        , const float _cutoff_dphi        = 0.3  
+        , const float _same_dphi          = 0.05 
+        , const float _cutoff_deta        = 0.3  
+        , const float _same_deta          = 0.05 
+        , const float _cluster_nzwidths   = 0.5
+        , const float _cluster_nphiwidths = 0.5
+        , const unsigned short    _max_nreco_per_truth  = 4
+        , const unsigned short    _max_ntruth_per_reco  = 4
     );  // for some output kinematis
 
     ~TruthRecoTrackMatching() override = default; 
@@ -67,10 +73,13 @@ class TruthRecoTrackMatching : public SubsysReco
     int process_event(PHCompositeNode *) override; //`
     int End(PHCompositeNode           *) override;
 
+    G4Eval::TrkrClusterComparer m_cluster_comp;
+    G4Eval::ClusCntr            m_cluscntr;
+
     int createNodes(PHCompositeNode* topNode);
 
-    void set_cluster_nphiwidths       (float val) { m_cluster_nphiwidths = val; };
-    void set_cluster_nzwidths         (float val) { m_cluster_nzwidths   = val; };
+    void set_cluster_nphiwidths       (float val) { m_cluster_comp.set_nphi_widths(val);};
+    void set_cluster_nzwidths         (float val) { m_cluster_comp.set_nz_widths(val);};
     void set_cutoff_deta              (float val) { m_cutoff_deta        = val; };
     void set_cutoff_dphi              (float val) { m_cutoff_dphi        = val; };
     void set_nmin_truth_cluster_ratio (float val) { m_nmincluster_ratio  = val; };
@@ -84,10 +93,12 @@ class TruthRecoTrackMatching : public SubsysReco
   //--------------------------------------------------
   // Internal functions
   //--------------------------------------------------
+  
 
     //--------------------------------------------------
     // Constant parameters for track matching
     //--------------------------------------------------
+
     unsigned short  m_nmincluster_match; // minimum of matched clustered to keep a truth to emb match
     float  m_nmincluster_ratio; // minimum ratio of truth clustered that must be matched in reconstructed track
 
@@ -96,15 +107,15 @@ class TruthRecoTrackMatching : public SubsysReco
     double m_cutoff_deta; //  how far in |eta_truth-eta_reco| to match
     double m_same_deta;   // |eta_truth-eta_reco| to auto-evaluate (is < m_cutoff_deta)
 
-    double m_cluster_nzwidths;   // cutoff in *getPhiSize() in cluster for |cluster_phi_truth-cluster_phi_reco| to match
-    double m_cluster_nphiwidths; // same for eta
+    /* double m_cluster_nzwidths;   // cutoff in *getPhiSize() in cluster for |cluster_phi_truth-cluster_phi_reco| to match */
+    /* double m_cluster_nphiwidths; // same for eta */
 
     unsigned short m_max_nreco_per_truth;
     unsigned short m_max_ntruth_per_reco;
 
 
-    std::array<double, 55> m_phistep {0.}; // the phistep squared
-    double m_zstep {0.};
+    /* std::array<double, 55> m_phistep {0.}; // the phistep squared */
+    /* double m_zstep {0.}; */
 
     std::map<unsigned short, unsigned short>  m_nmatched_index_true {};
 
@@ -211,8 +222,57 @@ class TruthRecoTrackMatching : public SubsysReco
     std::pair<bool, float> compare_cluster_pair(TrkrDefs::cluskey key_T,
         TrkrDefs::cluskey key_R, TrkrDefs::hitsetkey key, bool
         calc_sigma=false);
+
+    // ------------------------------------------------------------------
+    // output for diagnositics:
+    //  If there is output, put all the clusters into the x, y, z
+    // ------------------------------------------------------------------
+    TTree* m_diag_tree { nullptr } ;
+    TFile* m_diag_file { nullptr } ;
+    bool m_write_diag { false };
+    void set_diagnostic_file(std::string file_name);
+
+    std::vector<int>   m_trkid_reco_matched {};
+    std::vector<int>   m_cnt_reco_matched {};
+    std::vector<unsigned int> m_i0_reco_matched {};
+    std::vector<unsigned int> m_i1_reco_matched {};
+    std::vector<unsigned int> m_layer_reco_matched {};
+    std::vector<float> m_x_reco_matched {};
+    std::vector<float> m_y_reco_matched {};
+    std::vector<float> m_z_reco_matched {};
+
+    std::vector<int>   m_trkid_reco_notmatched {};
+    std::vector<int>   m_cnt_reco_notmatched {};
+    std::vector<unsigned int> m_i0_reco_notmatched {};
+    std::vector<unsigned int> m_i1_reco_notmatched {};
+    std::vector<unsigned int> m_layer_reco_notmatched {};
+    std::vector<float> m_x_reco_notmatched {};
+    std::vector<float> m_y_reco_notmatched {};
+    std::vector<float> m_z_reco_notmatched {};
+
+    std::vector<int>   m_trkid_true_matched {};
+    std::vector<int>   m_cnt_true_matched {};
+    std::vector<unsigned int> m_i0_true_matched {};
+    std::vector<unsigned int> m_i1_true_matched {};
+    std::vector<unsigned int> m_layer_true_matched {};
+    std::vector<float> m_x_true_matched {};
+    std::vector<float> m_y_true_matched {};
+    std::vector<float> m_z_true_matched {};
+
+    std::vector<int>   m_trkid_true_notmatched {};
+    std::vector<int>   m_cnt_true_notmatched {};
+    std::vector<unsigned int> m_i0_true_notmatched {};
+    std::vector<unsigned int> m_i1_true_notmatched {};
+    std::vector<unsigned int> m_layer_true_notmatched {};
+    std::vector<float> m_x_true_notmatched {};
+    std::vector<float> m_y_true_notmatched {};
+    std::vector<float> m_z_true_notmatched {};
+
+    int m_event {0};
+
+    void clear_branch_vectors();
+    void fill_tree();
+
 };
-
-
 
 #endif

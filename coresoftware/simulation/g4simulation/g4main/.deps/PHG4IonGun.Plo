@@ -1,7 +1,7 @@
 PHG4IonGun.lo: PHG4IonGun.cc /usr/include/stdc-predef.h PHG4IonGun.h \
  PHG4ParticleGeneratorBase.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/fun4all/SubsysReco.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/fun4all/Fun4AllBase.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/fun4all/SubsysReco.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/fun4all/Fun4AllBase.h \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/climits \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/x86_64-pc-linux-gnu/bits/c++config.h \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/x86_64-pc-linux-gnu/bits/os_defines.h \
@@ -104,11 +104,11 @@ PHG4IonGun.lo: PHG4IonGun.cc /usr/include/stdc-predef.h PHG4IonGun.h \
  /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/bits/charconv.h \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/bits/basic_string.tcc \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/gsl/gsl_rng.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/gsl/gsl_rng.h \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/stdlib.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/gsl/gsl_types.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/gsl/gsl_errno.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/gsl/gsl_inline.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/gsl/gsl_types.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/gsl/gsl_errno.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/gsl/gsl_inline.h \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/vector \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/bits/stl_uninitialized.h \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/bits/stl_vector.h \
@@ -135,34 +135,34 @@ PHG4IonGun.lo: PHG4IonGun.cc /usr/include/stdc-predef.h PHG4IonGun.h \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/tr1/poly_laguerre.tcc \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/tr1/riemann_zeta.tcc \
  PHG4InEvent.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/PHObject.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/TObject.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/Rtypes.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/RtypesCore.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/ROOT/RConfig.hxx \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/RVersion.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/RConfigure.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/DllImport.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/PHObject.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/TObject.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/Rtypes.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/RtypesCore.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/ROOT/RConfig.hxx \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/RVersion.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/RConfigure.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/DllImport.h \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/cstddef \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/strtok.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/strtok.h \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/cstring \
  /usr/include/string.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/strlcpy.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/strlcpy.h \
  /usr/include/unistd.h /usr/include/bits/posix_opt.h \
  /usr/include/bits/environments.h /usr/include/bits/confname.h \
  /usr/include/getopt.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/snprintf.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/snprintf.h \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/typeinfo \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/atomic \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/bits/atomic_base.h \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/bits/atomic_lockfree_defines.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/TGenericClassInfo.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/TSchemaHelper.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/TIsAProxy.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/TVirtualIsAProxy.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/TStorage.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/TVersionCheck.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/RVersion.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/TGenericClassInfo.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/TSchemaHelper.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/TIsAProxy.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/TVirtualIsAProxy.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/TStorage.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/TVersionCheck.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/RVersion.h \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/iostream \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/ostream \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/ios \
@@ -202,18 +202,18 @@ PHG4IonGun.lo: PHG4IonGun.cc /usr/include/stdc-predef.h PHG4IonGun.h \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/utility \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/bits/stl_relops.h \
  PHG4Particle.h PHG4Particlev3.h PHG4Particlev2.h PHG4Particlev1.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/fun4all/Fun4AllReturnCodes.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/getClass.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/PHDataNode.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/PHNode.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/PHIODataNode.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/PHIOManager.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/PHNodeIOManager.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/phool.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/PHTypedNodeIterator.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/PHNodeIterator.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/PHPointerList.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/phooldefs.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/fun4all/Fun4AllReturnCodes.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/getClass.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/PHDataNode.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/PHNode.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/PHIODataNode.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/PHIOManager.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/PHNodeIOManager.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/phool.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/PHTypedNodeIterator.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/PHNodeIterator.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/PHPointerList.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/phooldefs.h \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/geant4.10.07.p04/include/Geant4/G4IonTable.hh \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/geant4.10.07.p04/include/Geant4/G4ios.hh \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/geant4.10.07.p04/include/Geant4/G4Types.hh \
@@ -256,9 +256,9 @@ PHG4IonGun.lo: PHG4IonGun.cc /usr/include/stdc-predef.h PHG4IonGun.h \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/bits/std_mutex.h \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/bits/unique_lock.h \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/geant4.10.07.p04/include/Geant4/G4ParticleDefinition.hh \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/CLHEP/Units/PhysicalConstants.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/CLHEP/Units/defs.h \
- /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/CLHEP/Units/SystemOfUnits.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/CLHEP/Units/PhysicalConstants.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/CLHEP/Units/defs.h \
+ /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/CLHEP/Units/SystemOfUnits.h \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/geant4.10.07.p04/include/Geant4/G4PDefManager.hh \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/geant4.10.07.p04/include/Geant4/pwdefs.hh \
  /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/geant4.10.07.p04/include/Geant4/G4AutoLock.hh \
@@ -289,8 +289,8 @@ PHG4IonGun.lo: PHG4IonGun.cc /usr/include/stdc-predef.h PHG4IonGun.h \
 /usr/include/stdc-predef.h:
 PHG4IonGun.h:
 PHG4ParticleGeneratorBase.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/fun4all/SubsysReco.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/fun4all/Fun4AllBase.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/fun4all/SubsysReco.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/fun4all/Fun4AllBase.h:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/climits:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/x86_64-pc-linux-gnu/bits/c++config.h:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/x86_64-pc-linux-gnu/bits/os_defines.h:
@@ -417,11 +417,11 @@ PHG4ParticleGeneratorBase.h:
 /usr/include/asm-generic/errno-base.h:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/bits/charconv.h:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/bits/basic_string.tcc:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/gsl/gsl_rng.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/gsl/gsl_rng.h:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/stdlib.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/gsl/gsl_types.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/gsl/gsl_errno.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/gsl/gsl_inline.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/gsl/gsl_types.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/gsl/gsl_errno.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/gsl/gsl_inline.h:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/vector:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/bits/stl_uninitialized.h:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/bits/stl_vector.h:
@@ -452,36 +452,36 @@ PHG4ParticleGeneratorBase.h:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/tr1/poly_laguerre.tcc:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/tr1/riemann_zeta.tcc:
 PHG4InEvent.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/PHObject.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/TObject.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/Rtypes.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/RtypesCore.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/ROOT/RConfig.hxx:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/RVersion.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/RConfigure.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/DllImport.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/PHObject.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/TObject.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/Rtypes.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/RtypesCore.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/ROOT/RConfig.hxx:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/RVersion.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/RConfigure.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/DllImport.h:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/cstddef:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/strtok.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/strtok.h:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/cstring:
 /usr/include/string.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/strlcpy.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/strlcpy.h:
 /usr/include/unistd.h:
 /usr/include/bits/posix_opt.h:
 /usr/include/bits/environments.h:
 /usr/include/bits/confname.h:
 /usr/include/getopt.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/snprintf.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/snprintf.h:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/typeinfo:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/atomic:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/bits/atomic_base.h:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/bits/atomic_lockfree_defines.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/TGenericClassInfo.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/TSchemaHelper.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/TIsAProxy.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/TVirtualIsAProxy.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/TStorage.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/TVersionCheck.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06/include/RVersion.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/TGenericClassInfo.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/TSchemaHelper.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/TIsAProxy.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/TVirtualIsAProxy.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/TStorage.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/TVersionCheck.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/root-6.26.06.p01/include/RVersion.h:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/iostream:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/ostream:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/ios:
@@ -524,18 +524,18 @@ PHG4Particle.h:
 PHG4Particlev3.h:
 PHG4Particlev2.h:
 PHG4Particlev1.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/fun4all/Fun4AllReturnCodes.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/getClass.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/PHDataNode.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/PHNode.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/PHIODataNode.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/PHIOManager.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/PHNodeIOManager.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/phool.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/PHTypedNodeIterator.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/PHNodeIterator.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/PHPointerList.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/phool/phooldefs.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/fun4all/Fun4AllReturnCodes.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/getClass.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/PHDataNode.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/PHNode.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/PHIODataNode.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/PHIOManager.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/PHNodeIOManager.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/phool.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/PHTypedNodeIterator.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/PHNodeIterator.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/PHPointerList.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/phool/phooldefs.h:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/geant4.10.07.p04/include/Geant4/G4IonTable.hh:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/geant4.10.07.p04/include/Geant4/G4ios.hh:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/geant4.10.07.p04/include/Geant4/G4Types.hh:
@@ -578,9 +578,9 @@ PHG4Particlev1.h:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/bits/std_mutex.h:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/gcc/12.1.0-57c96/x86_64-centos7/include/c++/12.1.0/bits/unique_lock.h:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/geant4.10.07.p04/include/Geant4/G4ParticleDefinition.hh:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/CLHEP/Units/PhysicalConstants.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/CLHEP/Units/defs.h:
-/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.346/include/CLHEP/Units/SystemOfUnits.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/CLHEP/Units/PhysicalConstants.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/CLHEP/Units/defs.h:
+/cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/release/release_ana/ana.362/include/CLHEP/Units/SystemOfUnits.h:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/geant4.10.07.p04/include/Geant4/G4PDefManager.hh:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/geant4.10.07.p04/include/Geant4/pwdefs.hh:
 /cvmfs/sphenix.sdcc.bnl.gov/gcc-12.1.0/opt/sphenix/core/geant4.10.07.p04/include/Geant4/G4AutoLock.hh:

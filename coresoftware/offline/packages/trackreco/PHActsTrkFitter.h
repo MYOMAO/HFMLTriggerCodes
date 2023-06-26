@@ -109,6 +109,8 @@ class PHActsTrkFitter : public SubsysReco
   /// Set flag for pp running
   void set_pp_mode(bool ispp) { m_pp_mode = ispp; }
 
+  void ignoreLayer(int layer) { m_ignoreLayer.insert(layer); }
+
  private:
 
   /// Get all the nodes
@@ -141,7 +143,8 @@ class PHActsTrkFitter : public SubsysReco
 				 SurfacePtrVec& surfaces) const;
   void checkSurfaceVec(SurfacePtrVec& surfaces) const;
 
-  bool getTrackFitResult(const FitResult& fitOutput, SvtxTrack* track);
+  bool getTrackFitResult(const FitResult& fitOutput, SvtxTrack* track,
+			 const ActsTrackFittingAlgorithm::MeasurementContainer& measurements);
 
   Acts::BoundSymMatrix setDefaultCovariance() const;
   void printTrackSeed(const ActsTrackFittingAlgorithm::TrackParameters& seed) const;
@@ -200,6 +203,8 @@ class PHActsTrkFitter : public SubsysReco
   TpcClusterMover _clusterMover;
   ClusterErrorPara _ClusErrPara;
 
+  std::set<int> m_ignoreLayer;
+ 
   std::string m_fieldMap = "";
 
   int _n_iteration = 0;

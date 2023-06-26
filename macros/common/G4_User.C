@@ -5,10 +5,10 @@
 #include "../../AntiTrigger/AntiTrigger.h"
 #include "G4_Input.C"
 
-	R__LOAD_LIBRARY(libfun4all.so)
-	R__LOAD_LIBRARY(libhfmltrigger.so)
-R__LOAD_LIBRARY(libantitrigger.so)
 
+R__LOAD_LIBRARY(libfun4all.so)
+R__LOAD_LIBRARY(libhfmltrigger.so)
+R__LOAD_LIBRARY(libantitrigger.so)
 class PHG4Reco;
 
 namespace Enable
@@ -50,7 +50,7 @@ void UserDetector(PHG4Reco *g4Reco)
 void UserAnalysisInit()
 {
   Fun4AllServer* se = Fun4AllServer::instance();
-	gSystem->Load("libhfmltrigger.so");
+  gSystem->Load("libhfmltrigger.so");
 
 
 
@@ -65,12 +65,13 @@ void UserAnalysisInit()
 		se->registerSubsystem(myFinder);
 	}
 
-	HFMLTriggerHepMCTrigger * Test = new HFMLTriggerHepMCTrigger("D0toPiKInAcceptance","Test",Enable::signal);
+	HFMLTriggerHepMCTrigger * Test = new HFMLTriggerHepMCTrigger("D0toPiKInAcceptance","Test",Enable::signal,Enable::bbBarSim);
 	Test->Verbosity(0);
 	se->registerSubsystem(Test);
 
-	HFMLTriggerInterface * Test2 = new HFMLTriggerInterface("Test2");
+	HFMLTriggerInterface * Test2 = new HFMLTriggerInterface("NewTest");
 	Test2->Verbosity(0);
+	std::cout << "Right Before registerSubsystem" << std::endl;
 	se->registerSubsystem(Test2);
   return;
 }

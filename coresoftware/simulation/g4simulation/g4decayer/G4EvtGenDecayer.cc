@@ -103,18 +103,10 @@ G4EvtGenDecayer::G4EvtGenDecayer()
   string decay = string(offline_main) + "/share/EvtGen/DECAY.DEC";  // Using PDG 2019 reference as the input for now
   string evt = string(offline_main) + "/share/EvtGen/evt.pdl";
 
+  std::cout << "Forced Decay? What the heck" << std::endl; 
+
   mEvtGen = new EvtGen(decay, evt, static_cast<EvtRandomEngine*>(mEvtGenRandomEngine), radCorrEngine, &extraModels);
   extraModels.clear();
-  // delete mEvtGen;	QATree
-
-   bool WilluseXml =false;
-  //  SetDecayTable("EvtGenDecayFiles/Bc.DStar+D0Star.Phi.DEC",WilluseXml);
-  // SetDecayTable("EvtGenDecayFiles/JpsiRHO.DEC",WilluseXml);
-  // SetDecayTable("EvtGenDecayFiles/JPsi.Phi.DEC",WilluseXml);
-  SetDecayTable("EvtGenDecayFiles/D0.KPi.DEC",WilluseXml);
-  std::cout << "EvtGen is FUCKIN Called BRo - D0 -> Kpi" << std::endl;
-  std::cout << "EvtGen is FUCKIN Called BRo - D0 -> Kpi - Again?" << std::endl;
-  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -184,8 +176,6 @@ G4DecayProducts* G4EvtGenDecayer::ImportDecayProducts(const G4Track& track)
 
   stack.push(part);
 
-  if(abs( part->pdg_id()) == 421) std::cout << "Parent: pdg = " << part->pdg_id() << std::endl;
-
   while (!stack.empty())
   {
     auto particle = stack.top();
@@ -196,16 +186,17 @@ G4DecayProducts* G4EvtGenDecayer::ImportDecayProducts(const G4Track& track)
       float EvtWidth = 9999;
       int pdg = children->pdg_id();
 
+	  if(abs(part->pdg_id()) == 421){
+
+		  std::cout << "children PDG = " << pdg << std::endl;
+	  }
+
       G4ParticleDefinition* particleDefinition = GetParticleDefinition(pdg);
       if (EvtPDL::evtIdFromLundKC(pdg).getId() != -1)
       {
         EvtWidth = EvtPDL::getWidth(EvtPDL::evtIdFromLundKC(pdg)) * 1000000;  // Decay Width Unit: GeV -> keV to define stable particles in EvtGen -> G4
       }
 
-	  if(abs( part->pdg_id()) == 421){
-		  std::cout << "Check: Children: pdg = " << pdg << std::endl;
-
-	  }
       if (particleDefinition && EvtWidth < WidthThreshold)
       {
         bool SameVtxPos = true;

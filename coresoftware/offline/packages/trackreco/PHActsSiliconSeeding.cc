@@ -170,10 +170,12 @@ GridSeeds PHActsSiliconSeeding::runSeeder(std::vector<const SpacePoint*>& spVec)
   
   /// Covariance converter functor needed by seed finder
   auto covConverter = 
-    [=](const SpacePoint& sp, float, float, float)
+    [=](const SpacePoint& sp, float zAlign, float rAlign, float sigmaError)
     -> std::pair<Acts::Vector3, Acts::Vector2> { 
        Acts::Vector3 position{sp.x(), sp.y(), sp.z()};
-       Acts::Vector2 cov{sp.m_varianceR, sp.m_varianceZ};
+       Acts::Vector2 cov;
+       cov[0] = (sp.m_varianceR + rAlign*rAlign) * sigmaError;
+       cov[1] = (sp.m_varianceZ + zAlign*zAlign) * sigmaError;
        return std::make_pair(position, cov);
   };
 
@@ -570,6 +572,9 @@ SpacePointPtr PHActsSiliconSeeding::makeSpacePoint(
     auto para_errors = _ClusErrPara.get_si_cluster_error(clus,key);
     localCov(0,0) = para_errors.first* Acts::UnitConstants::cm2;
     localCov(1,1) = para_errors.second* Acts::UnitConstants::cm2;
+  }else if(m_cluster_version==5){
+    localCov(0,0) = pow(clus->getRPhiError(),2) * Acts::UnitConstants::cm2;
+    localCov(1,1) = pow(clus->getZError(),2) * Acts::UnitConstants::cm2;
   }
     
   float x = globalPos.x();
@@ -725,6 +730,14 @@ Acts::SeedFinderConfig<SpacePoint> PHActsSiliconSeeding::configureSeeder()
 
   /// Maximum impact parameter must be smaller than rMin
   config.impactMax = m_impactMax;
+
+  /// Configurations for dealing with misalignment
+  config.zAlign = m_zalign;
+  config.rAlign = m_ralign;
+  config.toleranceParam = m_tolerance;
+  config.maxPtScattering = m_maxPtScattering;
+  config.sigmaError = m_sigmaError;
+  config.helixcut = m_helixcut;
 
   return config;
 }

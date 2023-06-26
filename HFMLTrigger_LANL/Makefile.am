@@ -48,8 +48,7 @@ libhfmltrigger_la_LIBADD = \
   -lg4dst \
   -lg4mvtx \
   -lg4eval \
-  -lphhepmc
-
+  -lphhepmc 
 # Rule for generating table CINT dictionaries.
 %_Dict.C: %.h %LinkDef.h
 	rootcint -f $@ @CINTDEFS@ $(DEFAULT_INCLUDES) $(AM_CPPFLAGS) $^
